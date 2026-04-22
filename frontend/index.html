@@ -1,332 +1,182 @@
-<!-- MANTIVE SEU CÓDIGO ORIGINAL E SÓ ADICIONEI/ALTEREI PARTES -->
-<!-- ALTERAÇÕES MARCADAS COMO: /* FIX */ -->
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Q.E.S ERP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q.E.S</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-
-body{
+body {
     margin:0;
-    font-family:Arial;
-    background:#0b0b0b;
+    font-family: Arial;
+    background:#000;
     color:#fff;
 }
 
-.container{display:flex;}
-
-/* SIDEBAR */
-.sidebar{
-    width:250px;
-    background:#050505;
-    padding:20px;
-    border-right:1px solid #222; /* FIX */
-}
-
-.logo{text-align:center;margin-bottom:20px;}
-
-.menu-item{
-    padding:12px;
-    margin:6px 0;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-.menu-item:hover{background:#c6a15b33;}
-.active{background:#c6a15b;color:#000;}
-
-.submenu{display:none;margin-left:15px;}
-.submenu div{padding:6px;font-size:13px;opacity:0.8;}
-
-/* CONTENT */
-.content{flex:1;padding:20px;}
-
-/* FIX HEADER SUPERIOR */
-.topbar{
+.container {
     display:flex;
-    justify-content:space-between;
-    margin-bottom:10px;
-    font-size:14px;
-    color:#ccc;
 }
 
-.header{text-align:center;margin-bottom:20px;}
-
-.gold-line{
-    height:2px;
-    background:#c6a15b;
-    margin:10px auto;
-    width:60%;
+.sidebar {
+    width:220px;
+    background:#0b0b0b;
+    padding:20px;
+    border-right:1px solid #222;
 }
 
-/* CARDS */
-.cards{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:15px;
-}
-
-.card{
-    border:1px solid #c6a15b;
-    border-radius:10px;
-    padding:15px;
-    background:#121212;
-    position:relative;
-}
-
-.card small{color:#aaa;} /* FIX */
-
-.card-icon{
-    position:absolute;
-    right:15px;
-    top:10px;
-    font-size:18px;
+.sidebar h2 {
     color:#c6a15b;
 }
 
-/* GRID */
-.grid{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:20px;
-    margin-top:20px;
-}
-
-.box{
-    background:#121212;
+.content {
+    flex:1;
     padding:20px;
-    border-radius:10px;
 }
 
-/* FIX BLOCOS INFERIORES */
-.bottom{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:20px;
-    margin-top:20px;
-}
-
-.small-box{
-    background:#121212;
-    padding:15px;
-    border-radius:10px;
-}
-
-/* FOOTER */
-.footer{
+.cards {
     display:flex;
-    justify-content:space-around;
-    margin-top:30px;
-    padding:20px;
-    border-top:1px solid #c6a15b; /* FIX */
-    text-align:center;
+    gap:15px;
+    margin-bottom:20px;
 }
 
-.footer span{
-    display:block;
-    font-size:12px;
-    opacity:0.7;
+.card {
+    flex:1;
+    border:1px solid #c6a15b;
+    border-radius:10px;
+    padding:15px;
 }
 
+.card h3 {
+    margin:0;
+    color:#aaa;
+}
+
+.card p {
+    font-size:20px;
+    margin:5px 0;
+}
+
+.chart-container {
+    display:flex;
+    gap:20px;
+}
+
+canvas {
+    background:#111;
+    border-radius:10px;
+    padding:10px;
+}
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<!-- SIDEBAR -->
-<div class="sidebar">
+    <div class="sidebar">
+        <h2>QUEIROZ</h2>
+        <p>Dashboard</p>
+        <p>Q - Qualificação</p>
+        <p>E - Estruturação</p>
+        <p>S - Sustentação</p>
+    </div>
 
-<div class="logo">
-<img src="assets/logo.png" width="120">
-</div>
+    <div class="content">
 
-<div class="menu-item active">🏠 Dashboard</div>
+        <h1 style="color:#c6a15b;">Q.E.S</h1>
+        <p>Transformando riscos em resultados</p>
 
-<div class="menu-item" onclick="toggleMenu('q')">🔍 Q - Qualificação</div>
-<div id="q" class="submenu">
-<div>📊 Análise Inicial</div>
-<div>📈 Diagnóstico Financeiro</div>
-<div>🛡 Score de Risco</div>
-</div>
+        <div class="cards">
+            <div class="card">
+                <h3>Faturamento</h3>
+                <p>R$ 245750</p>
+            </div>
+            <div class="card">
+                <h3>Lucro</h3>
+                <p>R$ 45890</p>
+            </div>
+            <div class="card">
+                <h3>Margem</h3>
+                <p>18.6%</p>
+            </div>
+        </div>
 
-<div class="menu-item" onclick="toggleMenu('e')">⚙️ E - Estruturação</div>
-<div id="e" class="submenu">
-<div>💰 Fluxo de Caixa</div>
-<div>📤 Contas a Pagar</div>
-<div>📥 Contas a Receber</div>
-<div>📑 DRE Gerencial</div>
-<div>📊 Indicadores</div>
-</div>
+        <div class="chart-container">
+            <canvas id="grafico"></canvas>
+            <canvas id="pizza"></canvas>
+        </div>
 
-<div class="menu-item" onclick="toggleMenu('s')">📈 S - Sustentação</div>
-<div id="s" class="submenu">
-<div>🧠 Planejamento</div>
-<div>📊 Viabilidade</div>
-<div>📉 Simulações</div>
-<div>🎯 Metas e Cenários</div>
-</div>
-
-<div class="menu-item">📄 Relatórios</div>
-<div class="menu-item">👥 Clientes</div>
-<div class="menu-item">⚙️ Configurações</div>
-<div class="menu-item">❓ Ajuda</div>
+    </div>
 
 </div>
 
-<!-- CONTENT -->
-<div class="content">
-
-<!-- FIX HEADER SUPERIOR -->
-<div class="topbar">
-<div>👤 Admin</div>
-<div>📅 01/05/2024 - 31/05/2024</div>
-</div>
-
-<!-- HEADER -->
-<div class="header">
-<img src="assets/logo.png" width="50">
-<h1>Q.E.S</h1>
-<div>Queiroz Enterprise System</div>
-<div class="gold-line"></div>
-<div style="color:#c6a15b">TRANSFORMANDO RISCOS EM RESULTADOS</div>
-</div>
-
-<!-- CARDS -->
-<div class="cards">
-
-<div class="card">
-<div class="card-icon">📊</div>
-Faturamento<br>
-<b>R$ 245750</b><br>
-<small>vs mês anterior</small><br>
-<span style="color:#00ff88">↑ 18%</span>
-</div>
-
-<div class="card">
-<div class="card-icon">💰</div>
-Lucro<br>
-<b>R$ 45890</b><br>
-<small>vs mês anterior</small><br>
-<span style="color:#00ff88">↑ 22%</span>
-</div>
-
-<div class="card">
-<div class="card-icon">📈</div>
-Margem<br>
-<b>18.6%</b>
-</div>
-
-<div class="card">
-<div class="card-icon">💳</div>
-Caixa<br>
-<b>R$ 67890</b>
-</div>
-
-<div class="card">
-<div class="card-icon">🛡</div>
-Score<br>
-<b>78/100</b><br>
-<span style="color:#00ff88">SAUDÁVEL</span>
-</div>
-
-</div>
-
-<!-- GRID -->
-<div class="grid">
-
-<div class="box">
-<h3>📊 Evolução Financeira</h3>
-<canvas id="grafico"></canvas>
-</div>
-
-<div class="box">
-<h3>🍩 Distribuição</h3>
-<canvas id="pizza"></canvas>
-</div>
-
-</div>
-
-<!-- FIX BLOCOS -->
-<div class="bottom">
-
-<div class="small-box">
-<h4>Fluxo de Caixa</h4>
-Saldo Final: R$ 67.890
-</div>
-
-<div class="small-box">
-<h4>Próximos Compromissos</h4>
-Aluguel, fornecedores...
-</div>
-
-<div class="small-box">
-<h4>Alertas Inteligentes</h4>
-Risco de caixa baixo
-</div>
-
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-
-<div>
-📊 <b>ANÁLISE INTELIGENTE</b>
-<span>Dados que geram clareza</span>
-</div>
-
-<div>
-📈 <b>DECISÕES ESTRATÉGICAS</b>
-<span>Informação para agir</span>
-</div>
-
-<div>
-🏆 <b>RESULTADOS SUSTENTÁVEIS</b>
-<span>Transformamos riscos em resultados</span>
-</div>
-
-</div>
-
-</div>
-</div>
-
+<!-- SCRIPT ÚNICO E CORRETO -->
 <script>
 
-function toggleMenu(id){
-    const el = document.getElementById(id);
-    el.style.display = el.style.display==="block"?"none":"block";
+// 🔒 LOGIN
+const user = localStorage.getItem("user");
+
+if (!user) {
+
+    document.body.innerHTML = `
+        <div style="
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+            background:#000;
+            color:#c6a15b;
+            flex-direction:column;
+        ">
+            <h1>Q.E.S</h1>
+            <p>Faça login para acessar o sistema</p>
+            <button onclick="login()" style="
+                padding:10px 20px;
+                background:#c6a15b;
+                border:none;
+                cursor:pointer;
+                margin-top:10px;
+            ">Entrar</button>
+        </div>
+    `;
+
+} else {
+
+    // 📊 GRÁFICO
+    new Chart(document.getElementById("grafico"), {
+        type: "bar",
+        data: {
+            labels: ["Jan","Fev","Mar","Abr","Mai"],
+            datasets: [
+                {label:"Receita", data:[200,250,300,350,400], backgroundColor:"#c6a15b"},
+                {label:"Despesas", data:[150,180,220,260,300], backgroundColor:"#666"},
+                {type:"line", label:"Lucro", data:[50,70,80,90,100], borderColor:"#c6a15b"}
+            ]
+        }
+    });
+
+    // 🥧 PIZZA
+    new Chart(document.getElementById("pizza"), {
+        type: "doughnut",
+        data: {
+            labels: ["Custos","Fixas","Variáveis","Outros"],
+            datasets: [{
+                data: [52,23,15,10],
+                backgroundColor: ["#c6a15b","#888","#aaa","#555"]
+            }]
+        }
+    });
+
 }
 
-/* GRÁFICO COM LINHA DE LUCRO */
-new Chart(document.getElementById("grafico"),{
-type:"bar",
-data:{
-labels:["Jan","Fev","Mar","Abr","Mai"],
-datasets:[
-{label:"Receita",data:[200,250,300,350,400],backgroundColor:"#c6a15b"},
-{label:"Despesas",data:[150,180,220,260,300],backgroundColor:"#666"},
-{type:"line",label:"Lucro",data:[50,70,80,90,100],borderColor:"#c6a15b"}
-]
+// 🔓 LOGIN
+function login(){
+    localStorage.setItem("user", "admin");
+    location.reload();
 }
-});
-
-/* PIZZA CORRIGIDA */
-new Chart(document.getElementById("pizza"),{
-type:"doughnut",
-data:{
-labels:["Custos","Fixas","Variáveis","Outros"],
-datasets:[{
-data:[52,23,15,10],
-backgroundColor:["#c6a15b","#888","#aaa","#555"]
-}]
-}
-});
 
 </script>
 
