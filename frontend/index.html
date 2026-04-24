@@ -142,11 +142,6 @@ text-align:center;
 <div onclick="navegar('metas')">🎯 Metas e Cenários</div>
 </div>
 
-<div class="menu-item">📄 Relatórios</div>
-<div class="menu-item">👥 Clientes</div>
-<div class="menu-item">⚙️ Configurações</div>
-<div class="menu-item">❓ Ajuda</div>
-
 </div>
 
 <!-- CONTENT -->
@@ -164,52 +159,15 @@ text-align:center;
 <div class="gold-line"></div>
 <div style="color:#c6a15b">TRANSFORMANDO RISCOS EM RESULTADOS</div>
 </div>
-<div id="tela-dinamica"></div>
 
 <!-- CARDS -->
 <div class="cards">
 
-<div class="card">
-<div style="display:flex; justify-content:space-between; width:100%;">
-<div>Faturamento<br><b id="faturamento">R$ 0</b></div>
-<i class="fas fa-chart-line" style="color:#c6a15b;"></i>
-</div>
-</div>
-
-<div class="card">
-<div style="display:flex; justify-content:space-between; width:100%;">
-<div>Lucro Líquido<br><b id="lucro">R$0</b></div>
-<i class="fas fa-dollar-sign" style="color:#c6a15b;"></i>
-</div>
-</div>
-
-<div class="card">
-<div style="display:flex; justify-content:space-between; width:100%;">
-<div>Margem<br><b id="margem">R$0</b></div>
-<i class="fas fa-percentage" style="color:#c6a15b;"></i>
-</div>
-</div>
-
-<div class="card">
-<div style="display:flex; justify-content:space-between; width:100%;">
-<div>Saldo de Caixa<br><b id="caixa">R$0</b></div>
-<i class="fas fa-wallet" style="color:#c6a15b;"></i>
-</div>
-</div>
-
-<div class="card">
-<div style="display:flex; justify-content:space-between; width:100%;">
-<div>
-<div style="font-size:11px;color:#aaa;">SCORE Q.E.S</div>
-<div id="score" style="font-size:20px;"></div>
-<div style="font-size:12px;">
-<span style="color:#C8A96F;">Situação:</span>
-<span style="color:#00ff88;"> SAUDÁVEL</span>
-</div>
-</div>
-<i class="fas fa-shield-alt" style="color:#c6a15b;"></i>
-</div>
-</div>
+<div class="card"><b id="faturamento">R$ 0</b></div>
+<div class="card"><b id="lucro">R$ 0</b></div>
+<div class="card"><b id="margem">0%</b></div>
+<div class="card"><b id="caixa">R$ 0</b></div>
+<div class="card"><b id="score">0/100</b></div>
 
 </div>
 
@@ -228,108 +186,14 @@ text-align:center;
 
 </div>
 
-<!-- BOTTOM -->
-<div class="bottom">
-
-<div class="small-box">
-<h4>💰 Fluxo de Caixa</h4>
-Saldo Inicial: R$ 52.430<br>
-Entradas: <span style="color:#00ff88">R$ 278.540</span><br>
-Saídas: <span style="color:#ff4d4d">R$ 263.080</span><br><br>
-<b>Saldo Final: R$ 67.890</b>
-</div>
-
-<div class="small-box">
-<h4>📅 Próximos Compromissos</h4>
-Aluguel - R$ 6.500<br>
-Folha - R$ 18.750<br>
-Fornecedores - R$ 9.840<br>
-Empréstimo - R$ 4.320
-</div>
-
-<div class="small-box">
-<h4>⚠️ Alertas Inteligentes</h4>
-Margem abaixo do ideal<br>
-Risco de caixa em 18 dias<br>
-Alto prazo de recebimento
-</div>
-
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-<div>📊 <b>ANÁLISE INTELIGENTE</b><br><span>Dados que geram clareza</span></div>
-<div>📈 <b>DECISÕES ESTRATÉGICAS</b><br><span>Informação para agir</span></div>
-<div>🏆 <b>RESULTADOS SUSTENTÁVEIS</b><br><span>Transformamos riscos em resultados</span></div>
-</div>
+<!-- TELA DINÂMICA -->
+<div id="tela-dinamica"></div>
 
 </div>
 </div>
 
 <script>
-window.onload = function(){
 
-fetch("./dados.json")
-.then(res => {
-    if(!res.ok) throw new Error("JSON não encontrado");
-    return res.json();
-})
-.then(data => {
-
-    console.log("DADOS OK:", data);
-
-    if(!data.kpis) return;
-
-    const cards = document.querySelectorAll(".card");
-
-    if(cards.length < 5) return;
-
-    cards[0].innerHTML = `
-    <div style="display:flex; justify-content:space-between;">
-        <div>Faturamento<br><b>R$ ${data.kpis.faturamento}</b></div>
-        <i class="fas fa-chart-line" style="color:#c6a15b;"></i>
-    </div>`;
-
-    cards[1].innerHTML = `
-    <div style="display:flex; justify-content:space-between;">
-        <div>Lucro Líquido<br><b>R$ ${data.kpis.lucro}</b></div>
-        <i class="fas fa-dollar-sign" style="color:#c6a15b;"></i>
-    </div>`;
-
-    cards[2].innerHTML = `
-    <div style="display:flex; justify-content:space-between;">
-        <div>Margem<br><b>${data.kpis.margem}%</b></div>
-        <i class="fas fa-percent" style="color:#c6a15b;"></i>
-    </div>`;
-
-    cards[3].innerHTML = `
-    <div style="display:flex; justify-content:space-between;">
-        <div>Saldo de Caixa<br><b>R$ ${data.kpis.caixa}</b></div>
-        <i class="fas fa-wallet" style="color:#c6a15b;"></i>
-    </div>`;
-
-    cards[4].innerHTML = `
-    <div style="display:flex; justify-content:space-between;">
-        <div>
-            <span style="color:#C8A96F">SCORE Q.E.S</span><br>
-            <b>${data.kpis.score}/100</b><br>
-            <span style="color:#C8A96F">Situação:</span>
-            <span style="color:#00ff88">${data.kpis.status}</span>
-        </div>
-        <i class="fas fa-shield-alt" style="color:#c6a15b;"></i>
-    </div>`;
-
-})
-.catch(err => {
-    console.error("ERRO:", err);
-    console.log("Sistema segue funcionando sem dados.");
-});
-
-}
-</script>
-<script>
-
-// ================= MENU =================
 function toggleMenu(id){
     const el = document.getElementById(id);
     el.style.display = el.style.display === "block" ? "none" : "block";
@@ -340,64 +204,71 @@ function navegar(secao){
 
     tela.innerHTML = `<div class="box">
         <h2>${secao.toUpperCase()}</h2>
-        <p>Conteúdo dinâmico carregado</p>
+        <p>Módulo em construção</p>
     </div>`;
 }
 
-// ================= DASHBOARD =================
 window.onload = function(){
 
 fetch("./dados.json")
 .then(res => res.json())
 .then(data => {
 
-    console.log("DADOS OK:", data);
+    // KPIs
+    faturamento.innerHTML = "R$ " + data.kpis.faturamento;
+    lucro.innerHTML = "R$ " + data.kpis.lucro;
+    margem.innerHTML = data.kpis.margem + "%";
+    caixa.innerHTML = "R$ " + data.kpis.caixa;
+    score.innerHTML = data.kpis.score + "/100";
 
-    // ===== KPIs =====
-    document.getElementById("faturamento").innerHTML = "R$ " + data.kpis.faturamento;
-    document.getElementById("lucro").innerHTML = "R$ " + data.kpis.lucro;
-    document.getElementById("margem").innerHTML = data.kpis.margem + "%";
-    document.getElementById("caixa").innerHTML = "R$ " + data.kpis.caixa;
-    document.getElementById("score").innerHTML = data.kpis.score + "/100";
-
-    // ===== GRÁFICO PRINCIPAL =====
-    new Chart(document.getElementById("grafico"), {
+    // GRÁFICO PADRÃO QES
+    new Chart(grafico, {
         type: "bar",
         data: {
             labels: data.grafico.labels,
             datasets: [
                 {
                     label: "Receita",
-                    data: data.grafico.receita
+                    data: data.grafico.receita,
+                    backgroundColor: "#c6a15b"
                 },
                 {
                     label: "Despesas",
-                    data: data.grafico.despesas
+                    data: data.grafico.despesas,
+                    backgroundColor: "#444"
                 },
                 {
                     label: "Lucro",
                     data: data.grafico.lucro,
-                    type: "line"
+                    type: "line",
+                    borderColor: "#c6a15b"
                 }
             ]
+        },
+        options:{
+            plugins:{legend:{labels:{color:"#fff"}}}
         }
     });
 
-    // ===== GRÁFICO PIZZA =====
-    new Chart(document.getElementById("pizza"), {
+    // PIZZA
+    new Chart(pizza, {
         type: "doughnut",
         data: {
-            labels: ["Custos", "Fixas", "Variáveis"],
+            labels: ["Custos","Fixas","Variáveis"],
             datasets: [{
-                data: [52, 23, 25]
+                data: [52,23,25],
+                backgroundColor:["#c6a15b","#555","#999"]
             }]
+        },
+        options:{
+            plugins:{legend:{labels:{color:"#fff"}}}
         }
     });
 
-})
-.catch(err => console.error("Erro JSON:", err));
+});
 
 }
 </script>
+
 </body>
 </html>
