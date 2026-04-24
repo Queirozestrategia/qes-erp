@@ -269,54 +269,40 @@ Alto prazo de recebimento
 <script>
 window.onload = function(){
 
-fetch("dados.json")
+fetch("./dados.json")
 .then(res => res.json())
 .then(data => {
 
-    console.log("DADOS:", data);
+    console.log("OK:", data);
 
     const cards = document.querySelectorAll(".card");
 
     if(cards.length >= 5){
 
-        // CARD 1 - FATURAMENTO
         cards[0].innerHTML = `
-<div style="display:flex; justify-content:space-between;">
-    <div>
-        Faturamento<br><b>R$ ${data.kpis.faturamento}</b>
-    </div>
-    <i class="fas fa-chart-line" style="color:#c6a15b;"></i>
-</div>
-`;
+        <div style="display:flex; justify-content:space-between;">
+            <div>Faturamento<br><b>R$ ${data.kpis.faturamento}</b></div>
+            <i class="fas fa-chart-line" style="color:#c6a15b;"></i>
+        </div>`;
 
-        // CARD 2 - LUCRO
         cards[1].innerHTML = `
         <div style="display:flex; justify-content:space-between;">
-            <div>
-                Lucro Líquido<br><b>R$ ${data.kpis.lucro}</b>
-            </div>
+            <div>Lucro Líquido<br><b>R$ ${data.kpis.lucro}</b></div>
             <i class="fas fa-dollar-sign" style="color:#c6a15b;"></i>
         </div>`;
 
-        // CARD 3 - MARGEM
         cards[2].innerHTML = `
         <div style="display:flex; justify-content:space-between;">
-            <div>
-                Margem<br><b>${data.kpis.margem}%</b>
-            </div>
+            <div>Margem<br><b>${data.kpis.margem}%</b></div>
             <i class="fas fa-percent" style="color:#c6a15b;"></i>
         </div>`;
 
-        // CARD 4 - CAIXA
         cards[3].innerHTML = `
         <div style="display:flex; justify-content:space-between;">
-            <div>
-                Saldo de Caixa<br><b>R$ ${data.kpis.caixa}</b>
-            </div>
+            <div>Saldo de Caixa<br><b>R$ ${data.kpis.caixa}</b></div>
             <i class="fas fa-wallet" style="color:#c6a15b;"></i>
         </div>`;
 
-        // CARD 5 - SCORE
         cards[4].innerHTML = `
         <div style="display:flex; justify-content:space-between;">
             <div>
@@ -329,7 +315,9 @@ fetch("dados.json")
         </div>`;
     }
 
-});
+})
+.catch(err => console.error("ERRO JSON:", err));
+
 }
 </script>
 </body>
