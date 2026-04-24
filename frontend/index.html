@@ -251,34 +251,41 @@ fetch("./dados.json")
 .then(res => res.json())
 .then(data => {
 
-    console.log("DADOS OK:", data);
+    console.log("DADOS:", data);
+
+    // 🔥 PROTEÇÃO TOTAL (fallback)
+    const kpis = data.kpis || {};
+    const grafico = data.grafico || {};
+    const fluxo = data.fluxo || {};
+    const compromissos = data.compromissos || [];
+    const alertas = data.alertas || [];
 
     // ================= KPIs =================
-    document.getElementById("faturamento").innerHTML = "R$ " + data.kpis.faturamento;
-    document.getElementById("lucro").innerHTML = "R$ " + data.kpis.lucro;
-    document.getElementById("margem").innerHTML = data.kpis.margem + "%";
-    document.getElementById("caixa").innerHTML = "R$ " + data.kpis.caixa;
-    document.getElementById("score").innerHTML = data.kpis.score + "/100";
+    document.getElementById("faturamento").innerHTML = "R$ " + (kpis.faturamento || 0);
+    document.getElementById("lucro").innerHTML = "R$ " + (kpis.lucro || 0);
+    document.getElementById("margem").innerHTML = (kpis.margem || 0) + "%";
+    document.getElementById("caixa").innerHTML = "R$ " + (kpis.caixa || 0);
+    document.getElementById("score").innerHTML = (kpis.score || 0) + "/100";
 
     // ================= GRÁFICO =================
     new Chart(document.getElementById("grafico"), {
         type: "bar",
         data: {
-            labels: data.grafico.labels,
+            labels: grafico.labels || [],
             datasets: [
                 {
                     label: "Receita",
-                    data: data.grafico.receita,
+                    data: grafico.receita || [],
                     backgroundColor: "#c6a15b"
                 },
                 {
                     label: "Despesas",
-                    data: data.grafico.despesas,
+                    data: grafico.despesas || [],
                     backgroundColor: "#444"
                 },
                 {
                     label: "Lucro",
-                    data: data.grafico.lucro,
+                    data: grafico.lucro || [],
                     type: "line",
                     borderColor: "#c6a15b",
                     tension: 0.3
@@ -314,29 +321,38 @@ fetch("./dados.json")
     });
 
     // ================= FLUXO =================
-    const fluxo = data.fluxo;
     const fluxoBox = document.querySelectorAll(".small-box")[0];
-
     fluxoBox.innerHTML = `
     <h4>💰 Fluxo de Caixa</h4>
-    Saldo Inicial: R$ ${fluxo.saldoInicial}<br>
-    Entradas: <span style="color:#00ff88">R$ ${fluxo.entradas}</span><br>
-    Saídas: <span style="color:#ff4d4d">R$ ${fluxo.saidas}</span><br><br>
-    <b>Saldo Final: R$ ${data.kpis.caixa}</b>
+    Saldo Inicial: R$ ${fluxo.saldoInicial || 0}<br>
+    Entradas: <span style="color:#00ff88">R$ ${fluxo.entradas || 0}</span><br>
+    Saídas: <span style="color:#ff4d4d">R$ ${fluxo.saidas || 0}</span><br><br>
+    <b>Saldo Final: R$ ${(kpis.caixa || 0)}</b>
     `;
 
     // ================= COMPROMISSOS =================
     const compBox = document.querySelectorAll(".small-box")[1];
     compBox.innerHTML = `<h4>📅 Próximos Compromissos</h4>` +
-        data.compromissos.map(c => `${c.nome} - R$ ${c.valor}`).join("<br>");
+        (compromissos.length
+            ? compromissos.map(c => `${c.nome} - R$ ${c.valor}`).join("<br>")
+            : "Sem dados");
 
     // ================= ALERTAS =================
     const alertBox = document.querySelectorAll(".small-box")[2];
     alertBox.innerHTML = `<h4>⚠️ Alertas Inteligentes</h4>` +
-        data.alertas.join("<br>");
+        (alertas.length ? alertas.join("<br>") : "Sem alertas");
 
 })
-.catch(err => console.error("Erro JSON:", err));
+.catch(err => {
+    console.error("Erro JSON:", err);
+
+    // 🔥 fallback total (evita tela quebrada)
+    document.getElementById("faturamento").innerHTML = "R$ 0";
+    document.getElementById("lucro").innerHTML = "R$ 0";
+    document.getElementById("margem").innerHTML = "0%";
+    document.getElementById("caixa").innerHTML = "R$ 0";
+    document.getElementById("score").innerHTML = "0/100";
+});
 
 }
 </script>
