@@ -164,6 +164,7 @@ text-align:center;
 <div class="gold-line"></div>
 <div style="color:#c6a15b">TRANSFORMANDO RISCOS EM RESULTADOS</div>
 </div>
+<div id="tela-dinamica"></div>
 
 <!-- CARDS -->
 <div class="cards">
@@ -266,62 +267,70 @@ Alto prazo de recebimento
 </div>
 
 <script>
+window.onload = function(){
 
-// MENU
-function toggleMenu(id){
-    const el = document.getElementById(id);
-    el.style.display = el.style.display==="block"?"none":"block";
+fetch("dados.json")
+.then(res => res.json())
+.then(data => {
+
+    console.log("DADOS:", data);
+
+    const cards = document.querySelectorAll(".card");
+
+    if(cards.length >= 5){
+
+        // CARD 1 - FATURAMENTO
+        cards[0].innerHTML = `
+<div style="display:flex; justify-content:space-between;">
+    <div>
+        Faturamento<br><b>R$ ${data.kpis.faturamento}</b>
+    </div>
+    <i class="fas fa-chart-line" style="color:#c6a15b;"></i>
+</div>
+`;
+
+        // CARD 2 - LUCRO
+        cards[1].innerHTML = `
+        <div style="display:flex; justify-content:space-between;">
+            <div>
+                Lucro Líquido<br><b>R$ ${data.kpis.lucro}</b>
+            </div>
+            <i class="fas fa-dollar-sign" style="color:#c6a15b;"></i>
+        </div>`;
+
+        // CARD 3 - MARGEM
+        cards[2].innerHTML = `
+        <div style="display:flex; justify-content:space-between;">
+            <div>
+                Margem<br><b>${data.kpis.margem}%</b>
+            </div>
+            <i class="fas fa-percent" style="color:#c6a15b;"></i>
+        </div>`;
+
+        // CARD 4 - CAIXA
+        cards[3].innerHTML = `
+        <div style="display:flex; justify-content:space-between;">
+            <div>
+                Saldo de Caixa<br><b>R$ ${data.kpis.caixa}</b>
+            </div>
+            <i class="fas fa-wallet" style="color:#c6a15b;"></i>
+        </div>`;
+
+        // CARD 5 - SCORE
+        cards[4].innerHTML = `
+        <div style="display:flex; justify-content:space-between;">
+            <div>
+                <span style="color:#C8A96F">SCORE Q.E.S</span><br>
+                <b>${data.kpis.score}/100</b><br>
+                <span style="color:#C8A96F">Situação:</span>
+                <span style="color:#00ff88">${data.kpis.status}</span>
+            </div>
+            <i class="fas fa-shield-alt" style="color:#c6a15b;"></i>
+        </div>`;
+    }
+
+});
 }
-
-function navegar(secao){
-    alert("Abrindo: " + secao);
-}
-
-// CARREGAR DADOS EXTERNOS
-async function carregarDados(){
-
-    const response = await fetch("dados.json");
-    const dados = await response.json();
-
-    // ===== KPIs =====
-    document.getElementById("faturamento").innerText = "R$ " + dados.kpis.faturamento;
-    document.getElementById("lucro").innerText = "R$ " + dados.kpis.lucro;
-    document.getElementById("margem").innerText = dados.kpis.margem + "%";
-    document.getElementById("caixa").innerText = "R$ " + dados.kpis.caixa;
-    document.getElementById("score").innerHTML =
-        `<b>${dados.kpis.score}</b><span style="color:#C8A96F;">/100</span><br>
-        <span style="color:#C8A96F;">Situação:</span>
-        <span style="color:#00ff88;"> ${dados.kpis.status}</span>`;
-
-    // ===== GRÁFICO =====
-    new Chart(document.getElementById("grafico"),{
-        type:"bar",
-        data:{
-            labels:dados.grafico.labels,
-            datasets:[
-                {label:"Receita",data:dados.grafico.receita,backgroundColor:"#c6a15b"},
-                {label:"Despesas",data:dados.grafico.despesas,backgroundColor:"#666"},
-                {type:"line",label:"Lucro",data:dados.grafico.lucro,borderColor:"#c6a15b"}
-            ]
-        }
-    });
-
-    // ===== PIZZA =====
-    new Chart(document.getElementById("pizza"),{
-        type:"doughnut",
-        data:{
-            labels:["Custos","Fixas","Variáveis","Outros"],
-            datasets:[{
-                data:[52,23,15,10],
-                backgroundColor:["#c6a15b","#888","#aaa","#555"]
-            }]
-        }
-    });
-
-}
-
-window.onload = carregarDados;
-
 </script>
 </body>
 </html>
