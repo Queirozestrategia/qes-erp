@@ -267,16 +267,6 @@ Alto prazo de recebimento
 
 <script>
 
-function toggleMenu(id){
-const el = docu<script>
-
-// ================= DADOS =================
-const dados = {
-    faturamento: [200000, 220000, 250000, 300000, 245750],
-    despesas: [150000, 170000, 180000, 200000, 199860],
-    lucro: [50000, 50000, 70000, 100000, 45890]
-};
-
 // ================= MENU =================
 function toggleMenu(id){
     const el = document.getElementById(id);
@@ -286,6 +276,13 @@ function toggleMenu(id){
 function navegar(secao){
     alert("Abrindo: " + secao);
 }
+
+// ================= DADOS =================
+const dados = {
+    faturamento: [200000, 220000, 250000, 300000, 245750],
+    despesas: [150000, 170000, 180000, 200000, 199860],
+    lucro: [50000, 50000, 70000, 100000, 45890]
+};
 
 // ================= GRÁFICOS =================
 window.onload = function(){
@@ -315,66 +312,6 @@ window.onload = function(){
 
 };
 
-</script>ment.getElementById(id);
-el.style.display = el.style.display==="block"?"none":"block";
-}
-
-function navegar(secao){
-alert("Abrindo: " + secao);
-}
-
-new Chart(document.getElementById("grafico"),{
-type:"bar",
-data:{
-labels:["Jan","Fev","Mar","Abr","Mai"],
-datasets:[
-{label:"Receita",data:dados.faturamento,backgroundColor:"#c6a15b"},
-{label:"Despesas",data:dados.despesas,backgroundColor:"#666"},
-{type:"line",label:"Lucro",data:dados.lucro,borderColor:"#c6a15b"}
-]
-}
-});
-
-new Chart(document.getElementById("pizza"),{
-type:"doughnut",
-data:{
-labels:["Custos","Fixas","Variáveis","Outros"],
-datasets:[{
-data:[52,23,15,10],
-backgroundColor:["#c6a15b","#888","#aaa","#555"]
-}]
-}
-});
-<script>
-
-const dados = {
-    faturamento: [200000, 220000, 250000, 300000, 245750],
-    despesas: [150000, 170000, 180000, 200000, 199860],
-    lucro: [50000, 50000, 70000, 100000, 45890],
-
-Saldo Inicial: R$ <span id="saldoInicial"></span><br>
-Entradas: <span id="entradas" style="color:#00ff88"></span><br>
-Saídas: <span id="saidas" style="color:#ff4d4d"></span><br><br>
-<b>Saldo Final: R$ <span id="saldoFinal"></span></b>
-
-    compromissos: [
-        {nome:"Aluguel", valor:6500, data:"05/06"},
-        {nome:"Folha", valor:18750, data:"10/06"},
-        {nome:"Fornecedores", valor:9840, data:"12/06"},
-        {nome:"Empréstimo", valor:4320, data:"15/06"}
-    ],
-
-    alertas: [
-        "Margem abaixo do ideal",
-        "Risco de caixa em 18 dias",
-        "Prazo alto de recebimento"
-    ]
-};
-document.getElementById("saldoInicial").innerText = dados.fluxoCaixa.saldoInicial;
-document.getElementById("entradas").innerText = dados.fluxoCaixa.entradas;
-document.getElementById("saidas").innerText = dados.fluxoCaixa.saidas;
-document.getElementById("saldoFinal").innerText =
-    dados.fluxoCaixa.entradas - dados.fluxoCaixa.saidas;
-
+</script>
 </body>
 </html>
