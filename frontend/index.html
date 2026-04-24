@@ -194,6 +194,7 @@ text-align:center;
 
 <script>
 
+// ================= MENU =================
 function toggleMenu(id){
     const el = document.getElementById(id);
     el.style.display = el.style.display === "block" ? "none" : "block";
@@ -202,27 +203,31 @@ function toggleMenu(id){
 function navegar(secao){
     const tela = document.getElementById("tela-dinamica");
 
-    tela.innerHTML = `<div class="box">
+    tela.innerHTML = `
+    <div class="box">
         <h2>${secao.toUpperCase()}</h2>
-        <p>Módulo em construção</p>
+        <p>Conteúdo em construção</p>
     </div>`;
 }
 
+// ================= DASHBOARD =================
 window.onload = function(){
 
 fetch("./dados.json")
 .then(res => res.json())
 .then(data => {
 
-    // KPIs
-    faturamento.innerHTML = "R$ " + data.kpis.faturamento;
-    lucro.innerHTML = "R$ " + data.kpis.lucro;
-    margem.innerHTML = data.kpis.margem + "%";
-    caixa.innerHTML = "R$ " + data.kpis.caixa;
-    score.innerHTML = data.kpis.score + "/100";
+    console.log("DADOS OK:", data);
 
-    // GRÁFICO PADRÃO QES
-    new Chart(grafico, {
+    // ================= KPIs =================
+    document.getElementById("faturamento").innerHTML = "R$ " + data.kpis.faturamento;
+    document.getElementById("lucro").innerHTML = "R$ " + data.kpis.lucro;
+    document.getElementById("margem").innerHTML = data.kpis.margem + "%";
+    document.getElementById("caixa").innerHTML = "R$ " + data.kpis.caixa;
+    document.getElementById("score").innerHTML = data.kpis.score + "/100";
+
+    // ================= GRÁFICO =================
+    new Chart(document.getElementById("grafico"), {
         type: "bar",
         data: {
             labels: data.grafico.labels,
@@ -241,17 +246,24 @@ fetch("./dados.json")
                     label: "Lucro",
                     data: data.grafico.lucro,
                     type: "line",
-                    borderColor: "#c6a15b"
+                    borderColor: "#c6a15b",
+                    tension: 0.3
                 }
             ]
         },
         options:{
-            plugins:{legend:{labels:{color:"#fff"}}}
+            plugins:{
+                legend:{labels:{color:"#fff"}}
+            },
+            scales:{
+                x:{ticks:{color:"#aaa"}},
+                y:{ticks:{color:"#aaa"}}
+            }
         }
     });
 
-    // PIZZA
-    new Chart(pizza, {
+    // ================= PIZZA =================
+    new Chart(document.getElementById("pizza"), {
         type: "doughnut",
         data: {
             labels: ["Custos","Fixas","Variáveis"],
@@ -261,11 +273,36 @@ fetch("./dados.json")
             }]
         },
         options:{
-            plugins:{legend:{labels:{color:"#fff"}}}
+            plugins:{
+                legend:{labels:{color:"#fff"}}
+            }
         }
     });
 
-});
+    // ================= FLUXO =================
+    const fluxo = data.fluxo;
+    const fluxoBox = document.querySelectorAll(".small-box")[0];
+
+    fluxoBox.innerHTML = `
+    <h4>💰 Fluxo de Caixa</h4>
+    Saldo Inicial: R$ ${fluxo.saldoInicial}<br>
+    Entradas: <span style="color:#00ff88">R$ ${fluxo.entradas}</span><br>
+    Saídas: <span style="color:#ff4d4d">R$ ${fluxo.saidas}</span><br><br>
+    <b>Saldo Final: R$ ${data.kpis.caixa}</b>
+    `;
+
+    // ================= COMPROMISSOS =================
+    const compBox = document.querySelectorAll(".small-box")[1];
+    compBox.innerHTML = `<h4>📅 Próximos Compromissos</h4>` +
+        data.compromissos.map(c => `${c.nome} - R$ ${c.valor}`).join("<br>");
+
+    // ================= ALERTAS =================
+    const alertBox = document.querySelectorAll(".small-box")[2];
+    alertBox.innerHTML = `<h4>⚠️ Alertas Inteligentes</h4>` +
+        data.alertas.join("<br>");
+
+})
+.catch(err => console.error("Erro JSON:", err));
 
 }
 </script>
