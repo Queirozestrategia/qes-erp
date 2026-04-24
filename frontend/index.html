@@ -170,28 +170,28 @@ text-align:center;
 
 <div class="card">
 <div style="display:flex; justify-content:space-between; width:100%;">
-<div>Faturamento<br><b>R$ 245.750</b></div>
+<div>Faturamento<br><b id="faturamento">R$ 0</b></div>
 <i class="fas fa-chart-line" style="color:#c6a15b;"></i>
 </div>
 </div>
 
 <div class="card">
 <div style="display:flex; justify-content:space-between; width:100%;">
-<div>Lucro Líquido<br><b>R$ 45.890</b></div>
+<div>Lucro Líquido<br><b id="lucro">R$0</b></div>
 <i class="fas fa-dollar-sign" style="color:#c6a15b;"></i>
 </div>
 </div>
 
 <div class="card">
 <div style="display:flex; justify-content:space-between; width:100%;">
-<div>Margem<br><b>18,66%</b></div>
+<div>Margem<br><b id="margem">R$0</b></div>
 <i class="fas fa-percentage" style="color:#c6a15b;"></i>
 </div>
 </div>
 
 <div class="card">
 <div style="display:flex; justify-content:space-between; width:100%;">
-<div>Saldo de Caixa<br><b>R$ 67.890</b></div>
+<div>Saldo de Caixa<br><b id="caixa">R$0</b></div>
 <i class="fas fa-wallet" style="color:#c6a15b;"></i>
 </div>
 </div>
@@ -267,7 +267,7 @@ Alto prazo de recebimento
 
 <script>
 
-// ================= MENU =================
+// MENU
 function toggleMenu(id){
     const el = document.getElementById(id);
     el.style.display = el.style.display==="block"?"none":"block";
@@ -277,28 +277,36 @@ function navegar(secao){
     alert("Abrindo: " + secao);
 }
 
-// ================= DADOS =================
-const dados = {
-    faturamento: [200000, 220000, 250000, 300000, 245750],
-    despesas: [150000, 170000, 180000, 200000, 199860],
-    lucro: [50000, 50000, 70000, 100000, 45890]
-};
+// CARREGAR DADOS EXTERNOS
+async function carregarDados(){
 
-// ================= GRÁFICOS =================
-window.onload = function(){
+    const response = await fetch("dados.json");
+    const dados = await response.json();
 
+    // ===== KPIs =====
+    document.getElementById("faturamento").innerText = "R$ " + dados.kpis.faturamento;
+    document.getElementById("lucro").innerText = "R$ " + dados.kpis.lucro;
+    document.getElementById("margem").innerText = dados.kpis.margem + "%";
+    document.getElementById("caixa").innerText = "R$ " + dados.kpis.caixa;
+    document.getElementById("score").innerHTML =
+        `<b>${dados.kpis.score}</b><span style="color:#C8A96F;">/100</span><br>
+        <span style="color:#C8A96F;">Situação:</span>
+        <span style="color:#00ff88;"> ${dados.kpis.status}</span>`;
+
+    // ===== GRÁFICO =====
     new Chart(document.getElementById("grafico"),{
         type:"bar",
         data:{
-            labels:["Jan","Fev","Mar","Abr","Mai"],
+            labels:dados.grafico.labels,
             datasets:[
-                {label:"Receita",data:dados.faturamento,backgroundColor:"#c6a15b"},
-                {label:"Despesas",data:dados.despesas,backgroundColor:"#666"},
-                {type:"line",label:"Lucro",data:dados.lucro,borderColor:"#c6a15b"}
+                {label:"Receita",data:dados.grafico.receita,backgroundColor:"#c6a15b"},
+                {label:"Despesas",data:dados.grafico.despesas,backgroundColor:"#666"},
+                {type:"line",label:"Lucro",data:dados.grafico.lucro,borderColor:"#c6a15b"}
             ]
         }
     });
 
+    // ===== PIZZA =====
     new Chart(document.getElementById("pizza"),{
         type:"doughnut",
         data:{
@@ -310,7 +318,9 @@ window.onload = function(){
         }
     });
 
-};
+}
+
+window.onload = carregarDados;
 
 </script>
 </body>
