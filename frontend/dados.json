@@ -1,36 +1,72 @@
 {
-  "kpis": {
-    "faturamento": 245750,
-    "lucro": 45890,
-    "margem": 18.66,
-    "caixa": 67890,
-    "score": 78,
-    "status": "SAUDÁVEL"
-  },
-
-  "grafico": {
-    "labels": ["Jan","Fev","Mar","Abr","Mai"],
-    "receita": [200000, 220000, 250000, 300000, 245750],
-    "despesas": [150000, 170000, 180000, 200000, 199860],
-    "lucro": [50000, 50000, 70000, 100000, 45890]
-  },
-
-  "fluxo": {
-    "saldoInicial": 52430,
-    "entradas": 278540,
-    "saidas": 263080
-  },
-
-  "compromissos": [
-    {"nome":"Aluguel","valor":6500},
-    {"nome":"Folha","valor":18750},
-    {"nome":"Fornecedores","valor":9840},
-    {"nome":"Empréstimo","valor":4320}
-  ],
-
-  "alertas": [
-    "Margem abaixo do ideal",
-    "Risco de caixa em 18 dias",
-    "Prazo alto de recebimento"
-  ]
+    "kpis": {},
+    "grafico": {
+        "labels": [
+            "mes",
+            "Jan",
+            "Fev",
+            "Mar",
+            "Abr",
+            "Mai"
+        ],
+        "receita": [
+            "receita",
+            "200000",
+            "220000",
+            "250000",
+            "300000",
+            "245750"
+        ],
+        "despesas": [
+            "despesas",
+            "150000",
+            "170000",
+            "180000",
+            "200000",
+            "199860"
+        ],
+        "lucro": [
+            "lucro",
+            "50000",
+            "50000",
+            "70000",
+            "100000",
+            "45890"
+        ]
+    },
+    "fluxo": {
+        "tipo": "valor;;",
+        "saldoInicial": "52430;;",
+        "entradas": "278540;;",
+        "saidas": "263080;;",
+        ";;": NaN
+    },
+    "compromissos": [
+        {
+            "col0": "nome",
+            "col1": "valor"
+        },
+        {
+            "col0": "Aluguel",
+            "col1": "6500"
+        },
+        {
+            "col0": "Folha",
+            "col1": "18750"
+        },
+        {
+            "col0": "Fornecedores",
+            "col1": "9840"
+        },
+        {
+            "col0": "Empréstimo",
+            "col1": "4320"
+        }
+    ],
+    "alertas": [
+        "mensagem",
+        "Margem abaixo do ideal",
+        "Risco de caixa em 18 dias",
+        "Prazo alto de recebimento"
+    ]
 }
