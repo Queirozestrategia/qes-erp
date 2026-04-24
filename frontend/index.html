@@ -270,53 +270,132 @@ Alto prazo de recebimento
 window.onload = function(){
 
 fetch("./dados.json")
-.then(res => res.json())
+.then(res => {
+    if(!res.ok) throw new Error("JSON não encontrado");
+    return res.json();
+})
 .then(data => {
 
-    console.log("OK:", data);
+    console.log("DADOS OK:", data);
+
+    if(!data.kpis) return;
 
     const cards = document.querySelectorAll(".card");
 
-    if(cards.length >= 5){
+    if(cards.length < 5) return;
 
-        cards[0].innerHTML = `
-        <div style="display:flex; justify-content:space-between;">
-            <div>Faturamento<br><b>R$ ${data.kpis.faturamento}</b></div>
-            <i class="fas fa-chart-line" style="color:#c6a15b;"></i>
-        </div>`;
+    cards[0].innerHTML = `
+    <div style="display:flex; justify-content:space-between;">
+        <div>Faturamento<br><b>R$ ${data.kpis.faturamento}</b></div>
+        <i class="fas fa-chart-line" style="color:#c6a15b;"></i>
+    </div>`;
 
-        cards[1].innerHTML = `
-        <div style="display:flex; justify-content:space-between;">
-            <div>Lucro Líquido<br><b>R$ ${data.kpis.lucro}</b></div>
-            <i class="fas fa-dollar-sign" style="color:#c6a15b;"></i>
-        </div>`;
+    cards[1].innerHTML = `
+    <div style="display:flex; justify-content:space-between;">
+        <div>Lucro Líquido<br><b>R$ ${data.kpis.lucro}</b></div>
+        <i class="fas fa-dollar-sign" style="color:#c6a15b;"></i>
+    </div>`;
 
-        cards[2].innerHTML = `
-        <div style="display:flex; justify-content:space-between;">
-            <div>Margem<br><b>${data.kpis.margem}%</b></div>
-            <i class="fas fa-percent" style="color:#c6a15b;"></i>
-        </div>`;
+    cards[2].innerHTML = `
+    <div style="display:flex; justify-content:space-between;">
+        <div>Margem<br><b>${data.kpis.margem}%</b></div>
+        <i class="fas fa-percent" style="color:#c6a15b;"></i>
+    </div>`;
 
-        cards[3].innerHTML = `
-        <div style="display:flex; justify-content:space-between;">
-            <div>Saldo de Caixa<br><b>R$ ${data.kpis.caixa}</b></div>
-            <i class="fas fa-wallet" style="color:#c6a15b;"></i>
-        </div>`;
+    cards[3].innerHTML = `
+    <div style="display:flex; justify-content:space-between;">
+        <div>Saldo de Caixa<br><b>R$ ${data.kpis.caixa}</b></div>
+        <i class="fas fa-wallet" style="color:#c6a15b;"></i>
+    </div>`;
 
-        cards[4].innerHTML = `
-        <div style="display:flex; justify-content:space-between;">
-            <div>
-                <span style="color:#C8A96F">SCORE Q.E.S</span><br>
-                <b>${data.kpis.score}/100</b><br>
-                <span style="color:#C8A96F">Situação:</span>
-                <span style="color:#00ff88">${data.kpis.status}</span>
-            </div>
-            <i class="fas fa-shield-alt" style="color:#c6a15b;"></i>
-        </div>`;
-    }
+    cards[4].innerHTML = `
+    <div style="display:flex; justify-content:space-between;">
+        <div>
+            <span style="color:#C8A96F">SCORE Q.E.S</span><br>
+            <b>${data.kpis.score}/100</b><br>
+            <span style="color:#C8A96F">Situação:</span>
+            <span style="color:#00ff88">${data.kpis.status}</span>
+        </div>
+        <i class="fas fa-shield-alt" style="color:#c6a15b;"></i>
+    </div>`;
 
 })
-.catch(err => console.error("ERRO JSON:", err));
+.catch(err => {
+    console.error("ERRO:", err);
+    console.log("Sistema segue funcionando sem dados.");
+});
+
+}
+</script>
+<script>
+
+// ================= MENU =================
+function toggleMenu(id){
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function navegar(secao){
+    const tela = document.getElementById("tela-dinamica");
+
+    tela.innerHTML = `<div class="box">
+        <h2>${secao.toUpperCase()}</h2>
+        <p>Conteúdo dinâmico carregado</p>
+    </div>`;
+}
+
+// ================= DASHBOARD =================
+window.onload = function(){
+
+fetch("./dados.json")
+.then(res => res.json())
+.then(data => {
+
+    console.log("DADOS OK:", data);
+
+    // ===== KPIs =====
+    document.getElementById("faturamento").innerHTML = "R$ " + data.kpis.faturamento;
+    document.getElementById("lucro").innerHTML = "R$ " + data.kpis.lucro;
+    document.getElementById("margem").innerHTML = data.kpis.margem + "%";
+    document.getElementById("caixa").innerHTML = "R$ " + data.kpis.caixa;
+    document.getElementById("score").innerHTML = data.kpis.score + "/100";
+
+    // ===== GRÁFICO PRINCIPAL =====
+    new Chart(document.getElementById("grafico"), {
+        type: "bar",
+        data: {
+            labels: data.grafico.labels,
+            datasets: [
+                {
+                    label: "Receita",
+                    data: data.grafico.receita
+                },
+                {
+                    label: "Despesas",
+                    data: data.grafico.despesas
+                },
+                {
+                    label: "Lucro",
+                    data: data.grafico.lucro,
+                    type: "line"
+                }
+            ]
+        }
+    });
+
+    // ===== GRÁFICO PIZZA =====
+    new Chart(document.getElementById("pizza"), {
+        type: "doughnut",
+        data: {
+            labels: ["Custos", "Fixas", "Variáveis"],
+            datasets: [{
+                data: [52, 23, 25]
+            }]
+        }
+    });
+
+})
+.catch(err => console.error("Erro JSON:", err));
 
 }
 </script>
