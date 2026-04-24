@@ -268,7 +268,54 @@ Alto prazo de recebimento
 <script>
 
 function toggleMenu(id){
-const el = document.getElementById(id);
+const el = docu<script>
+
+// ================= DADOS =================
+const dados = {
+    faturamento: [200000, 220000, 250000, 300000, 245750],
+    despesas: [150000, 170000, 180000, 200000, 199860],
+    lucro: [50000, 50000, 70000, 100000, 45890]
+};
+
+// ================= MENU =================
+function toggleMenu(id){
+    const el = document.getElementById(id);
+    el.style.display = el.style.display==="block"?"none":"block";
+}
+
+function navegar(secao){
+    alert("Abrindo: " + secao);
+}
+
+// ================= GRÁFICOS =================
+window.onload = function(){
+
+    new Chart(document.getElementById("grafico"),{
+        type:"bar",
+        data:{
+            labels:["Jan","Fev","Mar","Abr","Mai"],
+            datasets:[
+                {label:"Receita",data:dados.faturamento,backgroundColor:"#c6a15b"},
+                {label:"Despesas",data:dados.despesas,backgroundColor:"#666"},
+                {type:"line",label:"Lucro",data:dados.lucro,borderColor:"#c6a15b"}
+            ]
+        }
+    });
+
+    new Chart(document.getElementById("pizza"),{
+        type:"doughnut",
+        data:{
+            labels:["Custos","Fixas","Variáveis","Outros"],
+            datasets:[{
+                data:[52,23,15,10],
+                backgroundColor:["#c6a15b","#888","#aaa","#555"]
+            }]
+        }
+    });
+
+};
+
+</script>ment.getElementById(id);
 el.style.display = el.style.display==="block"?"none":"block";
 }
 
