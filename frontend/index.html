@@ -142,6 +142,39 @@ font-size:20px;
 margin-bottom:5px;
 }
 
+.card i{
+color:#C8A96F;
+font-size:18px;
+}
+
+.gold{
+color:#C8A96F;
+}
+
+.footer-flex{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+}
+
+.footer-flex i{
+color:#C8A96F;
+font-size:20px;
+}
+
+.footer-item{
+display:flex;
+justify-content:center;
+}
+
+.card{
+box-shadow:0 0 0px transparent;
+}
+.card:hover{
+box-shadow:0 10px 25px rgba(198,161,91,0.2);
+}
+
 </style>
 </head>
 
@@ -195,7 +228,7 @@ margin-bottom:5px;
 </div>
 
 <div class="header">
-<img src="assets/logo.png" width="60">
+<img src="assets/logo.png" width="60" style="display:block;margin:0 auto 10px auto;">
 <h1>Q.E.S</h1>
 <div>Queiroz Enterprise System</div>
 <div class="gold-line"></div>
@@ -286,31 +319,36 @@ margin-bottom:5px;
 <div class="footer">
 
 <div class="footer-item">
+<div class="footer-flex">
+<i class="fa-solid fa-brain"></i>
 <div>
 <b class="gold">ANÁLISE INTELIGENTE</b><br>
 <small>Dados que geram clareza</small>
 </div>
-<i class="fa-solid fa-brain"></i>
+</div>
 </div>
 
 <div class="footer-item">
+<div class="footer-flex">
+<i class="fa-solid fa-chess"></i>
 <div>
 <b class="gold">DECISÕES ESTRATÉGICAS</b><br>
 <small>Informação para agir</small>
 </div>
-<i class="fa-solid fa-chess"></i>
+</div>
 </div>
 
 <div class="footer-item">
+<div class="footer-flex">
+<i class="fa-solid fa-chart-line"></i>
 <div>
 <b class="gold">RESULTADOS SUSTENTÁVEIS</b><br>
 <small>Transformando riscos em resultados</small>
 </div>
-<i class="fa-solid fa-chart-line"></i>
+</div>
 </div>
 
 </div>
-<div id="tela-dinamica"></div>
 
 <script>
 
@@ -365,7 +403,8 @@ borderWidth: 3,
 pointRadius: 4,
 pointBackgroundColor: "#c6a15b",
 tension: 0.4,
-order: 0
+order: 10, // 🔥 ISSO GARANTE NA FRENTE
+z: 10
 }
 ]
 },
@@ -382,12 +421,17 @@ labels:{color:"#aaa", usePointStyle:true}
 }
 },
 scales:{
-x:{ticks:{color:"#aaa"}},
-y:{ticks:{color:"#aaa"}}
+x:{
+ticks:{color:"#888"},
+grid:{color:"#1a1a1a"}
+},
+y:{
+ticks:{color:"#888"},
+grid:{color:"#1a1a1a"}
 }
 }
-});
-
+}
+}); // 🔥 FECHA O GRÁFICO CORRETAMENTE
 // PIZZA
 new Chart(document.getElementById("pizza"), {
 type: "doughnut",
