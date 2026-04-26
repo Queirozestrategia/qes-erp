@@ -139,9 +139,10 @@ gap:10px;
 .footer-flex i{color:#C8A96F;font-size:20px;}
 
 .logo-top{
-width:90px;
+width:110px;
 display:block;
-margin:0 auto 10px auto;
+margin:0 auto;
+margin-bottom:5px;
 }
 
 .titulo{color:#C8A96F;font-size:32px;}
@@ -158,18 +159,68 @@ margin:0 auto 10px auto;
 <div class="container">
 
 <div class="sidebar">
+
 <div class="logo">
 <img src="assets/logo.png" width="120">
 </div>
 
-<div class="menu-item active"><i class="fa-solid fa-house"></i> Dashboard</div>
+<div class="menu-item active">
+<i class="fa-solid fa-house"></i> Dashboard
+</div>
+
+<!-- Q -->
+<div class="menu-item" onclick="toggleMenu('q')">
+<i class="fa-solid fa-magnifying-glass"></i> Q - Qualificação
+</div>
+
+<div id="q" class="submenu">
+<div onclick="navegar('analise')">Análise Inicial</div>
+<div onclick="navegar('diagnostico')">Diagnóstico</div>
+<div onclick="navegar('risco')">Score de Risco</div>
+</div>
+
+<!-- E -->
+<div class="menu-item" onclick="toggleMenu('e')">
+<i class="fa-solid fa-gears"></i> E - Estruturação
+</div>
+
+<div id="e" class="submenu">
+<div onclick="navegar('fluxo')">Fluxo de Caixa</div>
+<div onclick="navegar('pagar')">Contas a Pagar</div>
+<div onclick="navegar('receber')">Contas a Receber</div>
+</div>
+
+<!-- S -->
+<div class="menu-item" onclick="toggleMenu('s')">
+<i class="fa-solid fa-chart-line"></i> S - Sustentação
+</div>
+
+<div id="s" class="submenu">
+<div onclick="navegar('planejamento')">Planejamento</div>
+<div onclick="navegar('viabilidade')">Viabilidade</div>
+<div onclick="navegar('simulacoes')">Simulações</div>
+<div onclick="navegar('metas')">Metas e Cenários</div>
+</div>
+
+<!-- extras -->
+<div class="menu-item"><i class="fa-solid fa-file"></i> Relatórios</div>
+<div class="menu-item"><i class="fa-solid fa-user"></i> Clientes</div>
+<div class="menu-item"><i class="fa-solid fa-gear"></i> Configurações</div>
+
 </div>
 
 <div class="content">
 
 <div class="topbar">
-<div>Queiroz Consultoria</div>
-<div>01/05/2024 - 31/05/2024</div>
+<div><i class="fa-solid fa-user"></i> Queiroz Consultoria</div>
+
+<div style="display:flex;gap:15px;align-items:center;">
+<i class="fa-solid fa-bell"></i>
+
+<div style="border:1px solid #c6a15b;padding:6px 12px;border-radius:8px;">
+📅 01/05/2024 - 31/05/2024
+</div>
+</div>
 </div>
 
 <div class="header">
@@ -265,17 +316,17 @@ margin:0 auto 10px auto;
 <div class="footer">
 
 <div class="footer-flex">
-<i class="fa-solid fa-brain"></i>
+<i class="fa-regular fa-lightbulb"></i>
 <div><b class="gold">ANÁLISE INTELIGENTE</b><br><small>Dados que geram clareza</small></div>
 </div>
 
 <div class="footer-flex">
-<i class="fa-solid fa-chess"></i>
+<i class="fa-regular fa-chess-knight"></i>
 <div><b class="gold">DECISÕES ESTRATÉGICAS</b><br><small>Informação para agir</small></div>
 </div>
 
 <div class="footer-flex">
-<i class="fa-solid fa-chart-line"></i>
+<i class="fa-regular fa-chart-line"></i>
 <div><b class="gold">RESULTADOS</b><br><small>Transformando riscos</small></div>
 </div>
 
@@ -296,12 +347,29 @@ fetch("./dados.json")
 const kpis = data.kpis || {};
 const grafico = data.grafico || {};
 
+// FLUXO
+const fluxo = data.fluxo || {};
+document.getElementById("saldoInicial").innerHTML = formatar(fluxo.saldoInicial);
+document.getElementById("entradas").innerHTML = formatar(fluxo.entradas);
+document.getElementById("saidas").innerHTML = formatar(fluxo.saidas);
+document.getElementById("saldoFinal").innerHTML = formatar(fluxo.saldoFinal);
+
+// COMPROMISSOS
+document.getElementById("compromissos").innerHTML =
+(data.compromissos||[]).map(c=>`<p>${c.nome} - ${formatar(c.valor)}</p>`).join("");
+
+// ALERTAS
+document.getElementById("alertas").innerHTML =
+(data.alertas||[]).map(a=>`<p>${a}</p>`).join("");
+
+// KPIs
 document.getElementById("faturamento").innerHTML = formatar(kpis.faturamento);
 document.getElementById("lucro").innerHTML = formatar(kpis.lucro);
-document.getElementById("margem").innerHTML = (kpis.margem || 0)+"%";
+document.getElementById("margem").innerHTML = (Number(kpis.margem || 0).toFixed(2) + "%");
 document.getElementById("caixa").innerHTML = formatar(kpis.caixa);
 document.getElementById("score").innerHTML = (kpis.score || 0)+"/100";
 
+// GRÁFICO
 new Chart(document.getElementById("grafico"),{
 type:"bar",
 data:{
@@ -309,31 +377,50 @@ labels:grafico.labels||[],
 datasets:[
 {label:"Receita",data:grafico.receita||[],backgroundColor:"#c6a15b"},
 {label:"Despesas",data:grafico.despesas||[],backgroundColor:"#333"},
-{label:"Lucro",data:grafico.lucro||[],type:"line",borderColor:"#c6a15b",borderWidth:4,order:10}
+{label:"Lucro",
+data:grafico.lucro||[],
+type:"line",
+borderColor:"#c6a15b",
+borderWidth:4,
+pointRadius:4,
+tension:0.4,
+order:0}
 ]
 }
 });
 
+// PIZZA
 new Chart(document.getElementById("pizza"),{
 type:"doughnut",
-data:{labels:["Custos","Fixas","Variáveis"],datasets:[{data:[52,23,25],backgroundColor:["#c6a15b","#444","#777"]}]}
+data:{
+labels:["Custos","Fixas","Variáveis"],
+datasets:[{
+data:[52,23,25],
+backgroundColor:["#c6a15b","#444","#777"],
+borderWidth:2,
+borderColor:"#111"
+}]
+},
+options:{
+plugins:{
+legend:{position:"right",labels:{color:"#fff"}}
+}
+}
 });
 
-const fluxo = data.fluxo || {};
-document.getElementById("saldoInicial").innerHTML = formatar(fluxo.saldoInicial);
-document.getElementById("entradas").innerHTML = formatar(fluxo.entradas);
-document.getElementById("saidas").innerHTML = formatar(fluxo.saidas);
-document.getElementById("saldoFinal").innerHTML = formatar(fluxo.saldoFinal);
-
-document.getElementById("compromissos").innerHTML =
-(data.compromissos||[]).map(c=>`<p>${c.nome} - ${formatar(c.valor)}</p>`).join("");
-
-document.getElementById("alertas").innerHTML =
-(data.alertas||[]).map(a=>`<p>${a}</p>`).join("");
-
+})
+.catch(err => {
+console.error("Erro ao carregar dados:", err);
 });
 
-};
+function toggleMenu(id){
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function navegar(secao){
+    console.log("Navegando para:", secao);
+}
 
 </script>
 
