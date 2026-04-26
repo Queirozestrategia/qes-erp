@@ -170,6 +170,17 @@ margin-bottom:5px;
 <div onclick="navegar('receber')">Contas a Receber</div>
 </div>
 
+<div class="menu-item" onclick="toggleMenu('s')">
+<i class="fa-solid fa-chart-line"></i> S - Sustentação
+</div>
+
+<div id="s" class="submenu">
+<div onclick="navegar('planejamento')">Planejamento</div>
+<div onclick="navegar('viabilidade')">Viabilidade</div>
+<div onclick="navegar('simulacoes')">Simulações</div>
+<div onclick="navegar('metas')">Metas e Cenários</div>
+</div>
+
 <div class="menu-item"><i class="fa-solid fa-file"></i> Relatórios</div>
 <div class="menu-item"><i class="fa-solid fa-user"></i> Clientes</div>
 <div class="menu-item"><i class="fa-solid fa-gear"></i> Configurações</div>
@@ -274,26 +285,31 @@ margin-bottom:5px;
 
 <div class="footer">
 
+<div class="footer-item">
 <div>
+<b class="gold">ANÁLISE INTELIGENTE</b><br>
+<small>Dados que geram clareza</small>
+</div>
 <i class="fa-solid fa-brain"></i>
-<br><b>ANÁLISE INTELIGENTE</b>
-<br><small>Dados que geram clareza</small>
 </div>
 
+<div class="footer-item">
 <div>
+<b class="gold">DECISÕES ESTRATÉGICAS</b><br>
+<small>Informação para agir</small>
+</div>
 <i class="fa-solid fa-chess"></i>
-<br><b>DECISÕES ESTRATÉGICAS</b>
-<br><small>Informação para agir</small>
 </div>
 
+<div class="footer-item">
 <div>
+<b class="gold">RESULTADOS SUSTENTÁVEIS</b><br>
+<small>Transformando riscos em resultados</small>
+</div>
 <i class="fa-solid fa-chart-line"></i>
-<br><b>RESULTADOS SUSTENTÁVEIS</b>
-<br><small>Transformando riscos em resultados</small>
 </div>
 
 </div>
-
 <div id="tela-dinamica"></div>
 
 <script>
@@ -344,18 +360,25 @@ label: "Lucro",
 data: grafico.lucro || [],
 type: "line",
 borderColor: "#c6a15b",
-borderWidth: 2,
+backgroundColor: "#c6a15b",
+borderWidth: 3,
+pointRadius: 4,
+pointBackgroundColor: "#c6a15b",
 tension: 0.4,
-order: 1
+order: 0
 }
 ]
 },
 options:{
 responsive:true,
+interaction:{
+mode:'index',
+intersect:false
+},
 plugins:{
 legend:{
 position:'bottom',
-labels:{color:"#aaa"}
+labels:{color:"#aaa", usePointStyle:true}
 }
 },
 scales:{
@@ -407,6 +430,7 @@ document.getElementById("alertas").innerHTML =
 alertas.map(a => `<p>${a}</p>`).join("");
 }); // FECHA O THEN DO FETCH
 }; // FECHA O WINDOW.ONLOAD
+
 </script>
 
 
