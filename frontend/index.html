@@ -6,8 +6,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
 <style>
+
 body{margin:0;font-family:Arial;background:#0b0b0b;color:#fff;}
 .container{display:flex;}
 
@@ -57,55 +57,29 @@ margin-top:15px;
 }
 
 .card {
-    background: #111;
-    border: 1px solid #c6a15b;
-    border-radius: 10px;
-    padding: 15px;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.grid{
-display:grid;
-grid-template-columns:2.2fr 1fr;
-gap:20px;
-margin-top:20px;
-}
-
-.box{
-background:#121212;
-padding:20px;
+background:#111;
+border:1px solid #c6a15b;
 border-radius:10px;
-}
-
-.bottom{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:20px;
-margin-top:20px;
-}
-
-.small-box{
-background:#121212;
 padding:15px;
-border-radius:10px;
+color:#fff;
+display:flex;
+justify-content:space-between;
+align-items:center;
+transition:all 0.3s ease;
 }
 
-.footer {
-    display: flex;
-    justify-content: space-around;
-    border-top: 1px solid #c6a15b;
-    padding: 20px;
-    text-align: center;
+.card:hover {
+transform:translateY(-5px);
+box-shadow:0 0 15px rgba(198,161,91,0.4);
 }
 
-.footer i {
-    color: #c6a15b;
-    margin-bottom: 5px;
+.small-box {
+transition:all 0.3s ease;
 }
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-.footer span{font-size:12px;color:#aaa;}
+
+.small-box:hover {
+transform:scale(1.02);
+}
 
 </style>
 </head>
@@ -365,12 +339,24 @@ fetch("./dados.json")
                 backgroundColor:["#c6a15b","#555","#999"]
             }]
         },
-        options:{
-            plugins:{
-                legend:{labels:{color:"#fff"}}
-            }
+     options:{
+    responsive:true,
+    plugins:{
+        legend:{
+            labels:{color:"#fff"}
         }
-    });
+    },
+    scales:{
+        x:{
+            ticks:{color:"#aaa"},
+            grid:{color:"#222"}
+        },
+        y:{
+            ticks:{color:"#aaa"},
+            grid:{color:"#222"}
+        }
+    }
+}
 
     // ================= FLUXO =================
     const fluxoBox = document.querySelectorAll(".small-box")[0];
