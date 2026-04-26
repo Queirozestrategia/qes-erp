@@ -96,7 +96,7 @@ border:1px solid #222;
 }
 
 canvas{
-height:300px !important;
+max-height:280px !important;
 }
 
 /* BLOCO INFERIOR */
@@ -154,25 +154,25 @@ margin-bottom:5px;
 <img src="assets/logo.png" width="120">
 </div>
 
-<div class="menu-item active"><i class="fa-regular fa-house"></i> Dashboard</div>
+<div class="menu-item active"><i class="fa-solid fa-house"></i> Dashboard</div>
 
-<div class="menu-item" onclick="toggleMenu('q')"><i class="fa-regular fa-chart-bar"></i> Q - Qualificação</div>
+<div class="menu-item" onclick="toggleMenu('q')"><i class="fa-solid fa-chart-bar"></i> Q - Qualificação</div>
 <div id="q" class="submenu">
 <div onclick="navegar('analise')">Análise Inicial</div>
 <div onclick="navegar('diagnostico')">Diagnóstico</div>
 <div onclick="navegar('risco')">Score de Risco</div>
 </div>
 
-<div class="menu-item" onclick="toggleMenu('e')"><i class="fa-regular fa-folder"></i> E - Estruturação</div>
+<div class="menu-item" onclick="toggleMenu('e')"><i class="fa-solid fa-folder"></i> E - Estruturação</div>
 <div id="e" class="submenu">
 <div onclick="navegar('fluxo')">Fluxo de Caixa</div>
 <div onclick="navegar('pagar')">Contas a Pagar</div>
 <div onclick="navegar('receber')">Contas a Receber</div>
 </div>
 
-<div class="menu-item"><i class="fa-regular fa-file"></i> Relatórios</div>
-<div class="menu-item"><i class="fa-regular fa-user"></i> Clientes</div>
-<div class="menu-item"><i class="fa-regular fa-gear"></i> Configurações</div>
+<div class="menu-item"><i class="fa-solid fa-file"></i> Relatórios</div>
+<div class="menu-item"><i class="fa-solid fa-user"></i> Clientes</div>
+<div class="menu-item"><i class="fa-solid fa-gear"></i> Configurações</div>
 
 </div>
 
@@ -198,7 +198,7 @@ margin-bottom:5px;
 <small>Faturamento</small><br>
 <b id="faturamento">R$ 0</b>
 </div>
-<i class="fa-regular fa-chart-line"></i>
+<i class="fa-solid fa-chart-line"></i>
 </div>
 
 <div class="card">
@@ -206,7 +206,7 @@ margin-bottom:5px;
 <small>Lucro Líquido</small><br>
 <b id="lucro">R$ 0</b>
 </div>
-<i class="fa-regular fa-dollar-sign"></i>
+<i class="fa-solid fa-dollar-sign"></i>
 </div>
 
 <div class="card">
@@ -214,7 +214,7 @@ margin-bottom:5px;
 <small>Margem</small><br>
 <b id="margem">0%</b>
 </div>
-<i class="fa-regular fa-percent"></i>
+<i class="fa-solid fa-percent"></i>
 </div>
 
 <div class="card">
@@ -222,7 +222,7 @@ margin-bottom:5px;
 <small>Saldo de Caixa</small><br>
 <b id="caixa">R$ 0</b>
 </div>
-<i class="fa-regular fa-wallet"></i>
+<i class="fa-solid fa-wallet"></i>
 </div>
 
 <div class="card">
@@ -230,7 +230,7 @@ margin-bottom:5px;
 <small>Score Q.E.S</small><br>
 <b id="score">0/100</b>
 </div>
-<i class="fa-regular fa-shield"></i>
+<i class="fa-solid fa-shield"></i>
 </div>
 
 </div>
@@ -251,16 +251,47 @@ margin-bottom:5px;
 
 <div class="bottom">
 
-<div class="small-box"></div>
-<div class="small-box"></div>
-<div class="small-box"></div>
+<div class="small-box">
+<h4>💰 Fluxo de Caixa</h4>
+<p>Saldo Inicial: <b id="saldoInicial">R$ 0</b></p>
+<p>Entradas: <span style="color:#00ff88" id="entradas">R$ 0</span></p>
+<p>Saídas: <span style="color:#ff4d4d" id="saidas">R$ 0</span></p>
+<hr>
+<p><b>Saldo Final: <span id="saldoFinal">R$ 0</span></b></p>
+</div>
+
+<div class="small-box">
+<h4>📅 Próximos Compromissos</h4>
+<div id="compromissos">Carregando...</div>
+</div>
+
+<div class="small-box">
+<h4>⚠️ Alertas Inteligentes</h4>
+<div id="alertas">Carregando...</div>
+</div>
 
 </div>
 
 <div class="footer">
-<div><i class="fa-regular fa-brain"></i><br><b>ANÁLISE INTELIGENTE</b></div>
-<div><i class="fa-regular fa-chess"></i><br><b>DECISÕES</b></div>
-<div><i class="fa-regular fa-chart-line"></i><br><b>RESULTADOS</b></div>
+
+<div>
+<i class="fa-solid fa-brain"></i>
+<br><b>ANÁLISE INTELIGENTE</b>
+<br><small>Dados que geram clareza</small>
+</div>
+
+<div>
+<i class="fa-solid fa-chess"></i>
+<br><b>DECISÕES ESTRATÉGICAS</b>
+<br><small>Informação para agir</small>
+</div>
+
+<div>
+<i class="fa-solid fa-chart-line"></i>
+<br><b>RESULTADOS SUSTENTÁVEIS</b>
+<br><small>Transformando riscos em resultados</small>
+</div>
+
 </div>
 
 <div id="tela-dinamica"></div>
@@ -271,7 +302,10 @@ function toggleMenu(id){
 const el = document.getElementById(id);
 el.style.display = el.style.display === "block" ? "none" : "block";
 }
-
+function navegar(secao){
+    document.getElementById("tela-dinamica").innerHTML =
+    "<h2 style='color:#c6a15b'>"+secao+"</h2>";
+}
 window.onload = function(){
 
 fetch("./dados.json")
@@ -296,24 +330,38 @@ datasets: [
 {
 label: "Receita",
 data: grafico.receita || [],
-backgroundColor: "#c6a15b"
+backgroundColor: "#c6a15b",
+borderRadius: 6
 },
 {
 label: "Despesas",
 data: grafico.despesas || [],
-backgroundColor: "#444"
+backgroundColor: "#333",
+borderRadius: 6
 },
 {
 label: "Lucro",
 data: grafico.lucro || [],
 type: "line",
 borderColor: "#c6a15b",
-order:0
+borderWidth: 2,
+tension: 0.4,
+order: 1
 }
 ]
 },
 options:{
-plugins:{legend:{position:'bottom',labels:{color:"#aaa"}}}
+responsive:true,
+plugins:{
+legend:{
+position:'bottom',
+labels:{color:"#aaa"}
+}
+},
+scales:{
+x:{ticks:{color:"#aaa"}},
+y:{ticks:{color:"#aaa"}}
+}
 }
 });
 
@@ -324,19 +372,43 @@ data: {
 labels: ["Custos","Fixas","Variáveis"],
 datasets: [{
 data: [52,23,25],
-backgroundColor:["#c6a15b","#444","#777"]
+backgroundColor:["#c6a15b","#444","#777"],
+borderWidth:2
 }]
 },
 options:{
-cutout:"70%",
-plugins:{legend:{position:"right",labels:{color:"#aaa"}}}
+cutout:"75%",
+plugins:{
+legend:{
+position:"right",
+labels:{color:"#aaa"}
+}
+}
 }
 });
+// ================= FLUXO DE CAIXA =================
+const fluxo = data.fluxo || {};
 
-});
-}
+document.getElementById("saldoInicial").innerHTML = "R$ " + (fluxo.saldoInicial || 0);
+document.getElementById("entradas").innerHTML = "R$ " + (fluxo.entradas || 0);
+document.getElementById("saidas").innerHTML = "R$ " + (fluxo.saidas || 0);
+document.getElementById("saldoFinal").innerHTML = "R$ " + (fluxo.saldoFinal || 0);
 
+// ================= COMPROMISSOS =================
+const compromissos = data.compromissos || [];
+
+document.getElementById("compromissos").innerHTML =
+compromissos.map(c => `<p>${c.nome} - R$ ${c.valor}</p>`).join("");
+
+// ================= ALERTAS =================
+const alertas = data.alertas || [];
+
+document.getElementById("alertas").innerHTML =
+alertas.map(a => `<p>${a}</p>`).join("");
+}); // FECHA O THEN DO FETCH
+}; // FECHA O WINDOW.ONLOAD
 </script>
+
 
 </body>
 </html>
