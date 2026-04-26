@@ -6,6 +6,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
 <style>
 
 body{margin:0;font-family:Arial;background:#0b0b0b;color:#fff;}
@@ -25,9 +26,12 @@ padding:12px;
 margin:6px 0;
 border-radius:8px;
 cursor:pointer;
+color:#aaa;
 }
 
-.menu-item:hover{background:#c6a15b33;}
+.menu-item i{margin-right:8px;}
+
+.menu-item:hover{background:#c6a15b33;color:#fff;}
 .active{background:#c6a15b;color:#000;}
 
 .submenu{display:none;margin-left:15px;}
@@ -61,16 +65,20 @@ background:#111;
 border:1px solid #c6a15b;
 border-radius:10px;
 padding:15px;
-color:#fff;
 display:flex;
 justify-content:space-between;
 align-items:center;
-transition:all 0.3s ease;
+transition:0.3s;
 }
 
 .card:hover {
 transform:translateY(-5px);
 box-shadow:0 0 15px rgba(198,161,91,0.4);
+}
+
+.card small{
+color:#888;
+font-size:12px;
 }
 
 .grid{
@@ -87,7 +95,11 @@ border-radius:10px;
 border:1px solid #222;
 }
 
-/* 🔥 BLOCO INFERIOR */
+canvas{
+height:300px !important;
+}
+
+/* BLOCO INFERIOR */
 .bottom{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -98,16 +110,22 @@ margin-top:20px;
 .small-box{
 background:#111;
 padding:20px;
-border-radius:10px;
-border:1px solid #222;
-transition:0.3s;
+border-radius:12px;
+border:1px solid #1c1c1c;
+position:relative;
 }
 
-.small-box:hover{
-transform:scale(1.02);
+.small-box::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:2px;
+background:#c6a15b;
 }
 
-/* 🔥 FOOTER PREMIUM */
+/* FOOTER */
 .footer{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -123,6 +141,7 @@ color:#c6a15b;
 font-size:20px;
 margin-bottom:5px;
 }
+
 </style>
 </head>
 
@@ -130,47 +149,38 @@ margin-bottom:5px;
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-
 <div class="logo">
 <img src="assets/logo.png" width="120">
 </div>
 
-<div class="menu-item active">🏠 Dashboard</div>
+<div class="menu-item active"><i class="fa-regular fa-house"></i> Dashboard</div>
 
-<div class="menu-item" onclick="toggleMenu('q')">🔍 Q - Qualificação</div>
+<div class="menu-item" onclick="toggleMenu('q')"><i class="fa-regular fa-chart-bar"></i> Q - Qualificação</div>
 <div id="q" class="submenu">
-<div onclick="navegar('analise')">📊 Análise Inicial</div>
-<div onclick="navegar('diagnostico')">📈 Diagnóstico Financeiro</div>
-<div onclick="navegar('risco')">🛡 Score de Risco</div>
+<div onclick="navegar('analise')">Análise Inicial</div>
+<div onclick="navegar('diagnostico')">Diagnóstico</div>
+<div onclick="navegar('risco')">Score de Risco</div>
 </div>
 
-<div class="menu-item" onclick="toggleMenu('e')">⚙️ E - Estruturação</div>
+<div class="menu-item" onclick="toggleMenu('e')"><i class="fa-regular fa-folder"></i> E - Estruturação</div>
 <div id="e" class="submenu">
-<div onclick="navegar('fluxo')">💰 Fluxo de Caixa</div>
-<div onclick="navegar('pagar')">📤 Contas a Pagar</div>
-<div onclick="navegar('receber')">📥 Contas a Receber</div>
-<div onclick="navegar('dre')">📑 DRE Gerencial</div>
-<div onclick="navegar('indicadores')">📊 Indicadores</div>
+<div onclick="navegar('fluxo')">Fluxo de Caixa</div>
+<div onclick="navegar('pagar')">Contas a Pagar</div>
+<div onclick="navegar('receber')">Contas a Receber</div>
 </div>
 
-<div class="menu-item" onclick="toggleMenu('s')">📈 S - Sustentação</div>
-<div id="s" class="submenu">
-<div onclick="navegar('planejamento')">🧠 Planejamento</div>
-<div onclick="navegar('viabilidade')">📊 Viabilidade</div>
-<div onclick="navegar('simulacoes')">📉 Simulações</div>
-<div onclick="navegar('metas')">🎯 Metas e Cenários</div>
-</div>
+<div class="menu-item"><i class="fa-regular fa-file"></i> Relatórios</div>
+<div class="menu-item"><i class="fa-regular fa-user"></i> Clientes</div>
+<div class="menu-item"><i class="fa-regular fa-gear"></i> Configurações</div>
 
 </div>
 
-<!-- CONTENT -->
 <div class="content">
 
 <div class="topbar">
-<div>👤 Queiroz Consultoria</div>
-<div>📅 01/05/2024 - 31/05/2024</div>
+<div>Queiroz Consultoria</div>
+<div>01/05/2024 - 31/05/2024</div>
 </div>
 
 <div class="header">
@@ -181,251 +191,151 @@ margin-bottom:5px;
 <div style="color:#c6a15b">TRANSFORMANDO RISCOS EM RESULTADOS</div>
 </div>
 
-<!-- CARDS -->
 <div class="cards">
 
 <div class="card">
-    <div style="display:flex; justify-content:space-between; width:100%;">
-        <div>
-            Faturamento<br>
-            <b id="faturamento">R$ 0</b>
-        </div>
-        <i class="fas fa-chart-line" style="color:#c6a15b"></i>
-    </div>
+<div>
+<small>Faturamento</small><br>
+<b id="faturamento">R$ 0</b>
+</div>
+<i class="fa-regular fa-chart-line"></i>
 </div>
 
 <div class="card">
-    <div style="display:flex; justify-content:space-between; width:100%;">
-        <div>
-            Lucro Líquido<br>
-            <b id="lucro">R$ 0</b>
-        </div>
-        <i class="fas fa-dollar-sign" style="color:#c6a15b"></i>
-    </div>
+<div>
+<small>Lucro Líquido</small><br>
+<b id="lucro">R$ 0</b>
+</div>
+<i class="fa-regular fa-dollar-sign"></i>
 </div>
 
 <div class="card">
-    <div style="display:flex; justify-content:space-between; width:100%;">
-        <div>
-            Margem<br>
-            <b id="margem">0%</b>
-        </div>
-        <i class="fas fa-percent" style="color:#c6a15b"></i>
-    </div>
+<div>
+<small>Margem</small><br>
+<b id="margem">0%</b>
+</div>
+<i class="fa-regular fa-percent"></i>
 </div>
 
 <div class="card">
-    <div style="display:flex; justify-content:space-between; width:100%;">
-        <div>
-            Saldo de Caixa<br>
-            <b id="caixa">R$ 0</b>
-        </div>
-        <i class="fas fa-wallet" style="color:#c6a15b"></i>
-    </div>
+<div>
+<small>Saldo de Caixa</small><br>
+<b id="caixa">R$ 0</b>
+</div>
+<i class="fa-regular fa-wallet"></i>
 </div>
 
 <div class="card">
-    <div style="display:flex; justify-content:space-between; width:100%;">
-        <div>
-            Score Q.E.S<br>
-            <b id="score">0/100</b>
-        </div>
-        <i class="fas fa-shield-alt" style="color:#c6a15b"></i>
-    </div>
+<div>
+<small>Score Q.E.S</small><br>
+<b id="score">0/100</b>
+</div>
+<i class="fa-regular fa-shield"></i>
 </div>
 
 </div>
 
-<!-- GRÁFICOS -->
 <div class="grid">
 
-    <div class="box">
-        <h3>📊 Evolução Financeira</h3>
-        <canvas id="grafico"></canvas>
-    </div>
+<div class="box">
+<h3>Evolução Financeira</h3>
+<canvas id="grafico"></canvas>
+</div>
 
-    <div class="box">
-        <h3>🍩 Distribuição</h3>
-        <canvas id="pizza"></canvas>
-    </div>
+<div class="box">
+<h3>Distribuição</h3>
+<canvas id="pizza"></canvas>
+</div>
 
 </div>
 
-<!-- BLOCOS INFERIORES -->
 <div class="bottom">
 
-    <div class="small-box">
-        <h4>💰 Fluxo de Caixa</h4>
-        Carregando...
-    </div>
-
-    <div class="small-box">
-        <h4>📅 Próximos Compromissos</h4>
-        Carregando...
-    </div>
-
-    <div class="small-box">
-        <h4>⚠️ Alertas Inteligentes</h4>
-        Carregando...
-    </div>
+<div class="small-box"></div>
+<div class="small-box"></div>
+<div class="small-box"></div>
 
 </div>
 
-<!-- RODAPÉ -->
 <div class="footer">
-    <div>
-        <i class="fas fa-brain"></i>
-        <b>ANÁLISE INTELIGENTE</b><br>
-        <span>Dados que geram clareza</span>
-    </div>
-
-    <div>
-        <i class="fas fa-chess"></i>
-        <b>DECISÕES ESTRATÉGICAS</b><br>
-        <span>Informação para agir</span>
-    </div>
-
-    <div>
-        <i class="fas fa-chart-line"></i>
-        <b>RESULTADOS SUSTENTÁVEIS</b><br>
-        <span>Transformando riscos em resultados</span>
-    </div>
+<div><i class="fa-regular fa-brain"></i><br><b>ANÁLISE INTELIGENTE</b></div>
+<div><i class="fa-regular fa-chess"></i><br><b>DECISÕES</b></div>
+<div><i class="fa-regular fa-chart-line"></i><br><b>RESULTADOS</b></div>
 </div>
 
-<!-- TELA DINÂMICA (APENAS UMA VEZ E NO FINAL) -->
 <div id="tela-dinamica"></div>
+
 <script>
 
-// ================= MENU =================
 function toggleMenu(id){
-    const el = document.getElementById(id);
-    el.style.display = el.style.display === "block" ? "none" : "block";
+const el = document.getElementById(id);
+el.style.display = el.style.display === "block" ? "none" : "block";
 }
 
-function navegar(secao){
-    const tela = document.getElementById("tela-dinamica");
-
-    tela.innerHTML = `
-    <div class="box">
-        <h2>${secao.toUpperCase()}</h2>
-        <p>Conteúdo em construção</p>
-    </div>`;
-}
-
-// ================= DASHBOARD =================
 window.onload = function(){
 
 fetch("./dados.json")
 .then(res => res.json())
 .then(data => {
 
-    console.log("DADOS:", data);
+const kpis = data.kpis || {};
+const grafico = data.grafico || {};
 
-    // 🔥 PROTEÇÃO TOTAL (fallback)
-    const kpis = data.kpis || {};
-    const grafico = data.grafico || {};
-    const fluxo = data.fluxo || {};
-    const compromissos = data.compromissos || [];
-    const alertas = data.alertas || [];
+document.getElementById("faturamento").innerHTML = "R$ " + (kpis.faturamento || 0);
+document.getElementById("lucro").innerHTML = "R$ " + (kpis.lucro || 0);
+document.getElementById("margem").innerHTML = (kpis.margem || 0) + "%";
+document.getElementById("caixa").innerHTML = "R$ " + (kpis.caixa || 0);
+document.getElementById("score").innerHTML = (kpis.score || 0) + "/100";
 
-    // ================= KPIs =================
-    document.getElementById("faturamento").innerHTML = "R$ " + (kpis.faturamento || 0);
-    document.getElementById("lucro").innerHTML = "R$ " + (kpis.lucro || 0);
-    document.getElementById("margem").innerHTML = (kpis.margem || 0) + "%";
-    document.getElementById("caixa").innerHTML = "R$ " + (kpis.caixa || 0);
-    document.getElementById("score").innerHTML = (kpis.score || 0) + "/100";
-
-    // ================= GRÁFICO =================
-    new Chart(document.getElementById("grafico"), {
-        type: "bar",
-        data: {
-            labels: grafico.labels || [],
-            datasets: [
-                {
-                    label: "Receita",
-                    data: grafico.receita || [],
-                    backgroundColor: "#c6a15b"
-                },
-                {
-                    label: "Despesas",
-                    data: grafico.despesas || [],
-                    backgroundColor: "#444"
-                },
-                {
-                    label: "Lucro",
-                    data: grafico.lucro || [],
-                    type: "line",
-                    borderColor: "#c6a15b",
-                    tension: 0.3
-                }
-            ]
-        },
-        options:{
-            plugins:{
-                legend:{labels:{color:"#fff"}}
-            },
-            scales:{
-                x:{ticks:{color:"#aaa"}},
-                y:{ticks:{color:"#aaa"}}
-            }
-        }
-    });
-
-// ================= PIZZA =================
-new Chart(document.getElementById("pizza"), {
-    type: "doughnut",
-    data: {
-        labels: ["Custos","Fixas","Variáveis"],
-        datasets: [{
-            data: [52,23,25],
-            backgroundColor:["#c6a15b","#555","#999"]
-        }]
-    },
-    options:{
-        responsive:true,
-        plugins:{
-            legend:{
-                labels:{color:"#fff"}
-            }
-        }
-    }
-});
-
-    // ================= FLUXO =================
-    const fluxoBox = document.querySelectorAll(".small-box")[0];
-    fluxoBox.innerHTML = `
-    <h4>💰 Fluxo de Caixa</h4>
-    Saldo Inicial: R$ ${fluxo.saldoInicial || 0}<br>
-    Entradas: <span style="color:#00ff88">R$ ${fluxo.entradas || 0}</span><br>
-    Saídas: <span style="color:#ff4d4d">R$ ${fluxo.saidas || 0}</span><br><br>
-    <b>Saldo Final: R$ ${(kpis.caixa || 0)}</b>
-    `;
-
-    // ================= COMPROMISSOS =================
-    const compBox = document.querySelectorAll(".small-box")[1];
-    compBox.innerHTML = `<h4>📅 Próximos Compromissos</h4>` +
-        (compromissos.length
-            ? compromissos.map(c => `${c.nome} - R$ ${c.valor}`).join("<br>")
-            : "Sem dados");
-
-    // ================= ALERTAS =================
-    const alertBox = document.querySelectorAll(".small-box")[2];
-    alertBox.innerHTML = `<h4>⚠️ Alertas Inteligentes</h4>` +
-        (alertas.length ? alertas.join("<br>") : "Sem alertas");
-
-})
-.catch(err => {
-    console.error("Erro JSON:", err);
-
-    // 🔥 fallback total (evita tela quebrada)
-    document.getElementById("faturamento").innerHTML = "R$ 0";
-    document.getElementById("lucro").innerHTML = "R$ 0";
-    document.getElementById("margem").innerHTML = "0%";
-    document.getElementById("caixa").innerHTML = "R$ 0";
-    document.getElementById("score").innerHTML = "0/100";
-});
-
+// GRÁFICO
+new Chart(document.getElementById("grafico"), {
+type: "bar",
+data: {
+labels: grafico.labels || [],
+datasets: [
+{
+label: "Receita",
+data: grafico.receita || [],
+backgroundColor: "#c6a15b"
+},
+{
+label: "Despesas",
+data: grafico.despesas || [],
+backgroundColor: "#444"
+},
+{
+label: "Lucro",
+data: grafico.lucro || [],
+type: "line",
+borderColor: "#c6a15b",
+order:0
 }
+]
+},
+options:{
+plugins:{legend:{position:'bottom',labels:{color:"#aaa"}}}
+}
+});
+
+// PIZZA
+new Chart(document.getElementById("pizza"), {
+type: "doughnut",
+data: {
+labels: ["Custos","Fixas","Variáveis"],
+datasets: [{
+data: [52,23,25],
+backgroundColor:["#c6a15b","#444","#777"]
+}]
+},
+options:{
+cutout:"70%",
+plugins:{legend:{position:"right",labels:{color:"#aaa"}}}
+}
+});
+
+});
+}
+
 </script>
 
 </body>
