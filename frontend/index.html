@@ -340,7 +340,7 @@ return Number(valor || 0).toLocaleString("pt-BR",{style:"currency",currency:"BRL
 
 window.onload = function(){
 
-fetch("./dados.json")
+fetch("dados.json")
 .then(res=>res.json())
 .then(data=>{
 
@@ -377,14 +377,16 @@ labels:grafico.labels||[],
 datasets:[
 {label:"Receita",data:grafico.receita||[],backgroundColor:"#c6a15b"},
 {label:"Despesas",data:grafico.despesas||[],backgroundColor:"#333"},
-{label:"Lucro",
+{
+label:"Lucro",
 data:grafico.lucro||[],
 type:"line",
 borderColor:"#c6a15b",
-borderWidth:4,
+borderWidth:3,
 pointRadius:4,
 tension:0.4,
-order:0}
+order:2 // 🔥 ESSENCIAL (linha na frente)
+}
 ]
 }
 });
@@ -414,12 +416,12 @@ console.error("Erro ao carregar dados:", err);
 });
 
 function toggleMenu(id){
-    const el = document.getElementById(id);
-    el.style.display = el.style.display === "block" ? "none" : "block";
+const el = document.getElementById(id);
+el.style.display = el.style.display === "block" ? "none" : "block";
 }
 
 function navegar(secao){
-    console.log("Navegando para:", secao);
+console.log("Navegando para:", secao);
 }
 
 </script>
