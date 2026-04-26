@@ -385,7 +385,7 @@ borderColor:"#c6a15b",
 borderWidth:3,
 pointRadius:4,
 tension:0.4,
-order:2 // 🔥 ESSENCIAL (linha na frente)
+order:2
 }
 ]
 }
@@ -414,6 +414,8 @@ legend:{position:"right",labels:{color:"#fff"}}
 .catch(err => {
 console.error("Erro ao carregar dados:", err);
 });
+
+}; 
 
 function toggleMenu(id){
 const el = document.getElementById(id);
