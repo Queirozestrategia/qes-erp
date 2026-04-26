@@ -80,7 +80,19 @@ transition:all 0.3s ease;
 .small-box:hover {
 transform:scale(1.02);
 }
+.grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:20px;
+margin-top:20px;
+}
 
+.box{
+background:#111;
+padding:20px;
+border-radius:10px;
+border:1px solid #222;
+}
 </style>
 </head>
 
@@ -356,7 +368,7 @@ fetch("./dados.json")
             grid:{color:"#222"}
         }
     }
-}
+});
 
     // ================= FLUXO =================
     const fluxoBox = document.querySelectorAll(".small-box")[0];
