@@ -148,10 +148,37 @@ margin-bottom:5px;
 .titulo{color:#C8A96F;font-size:32px;}
 .subtitulo{color:#aaa;font-size:14px;}
 .slogan{color:#C8A96F;font-size:13px;}
-
 .positivo{color:#00ff88;font-size:11px;}
 
+.btn-dashboard {
+  padding:10px 20px;
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn-dashboard:hover {
+  background:#1e40af;
+}
+.btn-Relatórios {
+  padding:10px 20px;
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn-Relatórios:hover {
+  background:#1e40af;
+}
+
 </style>
+
 </head>
 
 <body>
@@ -164,9 +191,11 @@ margin-bottom:5px;
 <img src="assets/logo.png" width="120">
 </div>
 
-<div class="menu-item active">
-<i class="fa-solid fa-house"></i> Dashboard
-</div>
+<a href="/dashboard.html" style="text-decoration:none;">
+  <div class="menu-item active">
+    <i class="fa-solid fa-chart-line"></i> Dashboard Financeiro
+  </div>
+</a>
 
 <!-- Q -->
 <div class="menu-item" onclick="toggleMenu('q')">
@@ -224,6 +253,11 @@ margin-bottom:5px;
 </div>
 
 <div class="header">
+<div style="text-align:center; margin-bottom:20px;">
+  <a href="/dashboard.html">
+    <button class="btn-Relatórios">📊 Relatórios</button>
+  </a>
+</div>
 <img src="assets/logo.png" class="logo-top">
 <h1 class="titulo">Q.E.S</h1>
 <div class="subtitulo">Queiroz Enterprise System</div>

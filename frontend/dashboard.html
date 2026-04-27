@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+  <meta charset="UTF-8">
+  <title>Dashboard Financeiro</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      padding: 20px;
+      border-radius: 12px;
+      width: 220px;
+      font-size: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .receita { background: #16a34a; }
+    .despesa { background: #dc2626; }
+    .lucro { background: #2563eb; }
+
+    canvas {
+      max-width: 500px;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>📊 Dashboard Financeiro</h1>
+
+  <div class="cards">
+    <div class="card receita">
+      <h3>Receitas</h3>
+      <p id="receitas">R$ 0</p>
+    </div>
+
+    <div class="card despesa">
+      <h3>Despesas</h3>
+      <p id="despesas">R$ 0</p>
+    </div>
+
+    <div class="card lucro">
+      <h3>Lucro</h3>
+      <p id="lucro">R$ 0</p>
+    </div>
+  </div>
+
+  <canvas id="grafico"></canvas>
+
+<script>
+let grafico;
+
+async function carregarDashboard() {
+  try {
+    const API_URL = window.location.hostname.includes("localhost")
+      ? "http://127.0.0.1:8000"
+      : "https://qes-backend.onrender.com";
+
+    const response = await fetch(`${API_URL}/dashboard/`);
+
+    if (!response.ok) {
+      throw new Error("Erro na API");
+    }
+
+    const data = await response.json();
+
+    // 🔥 mensagem status financeiro
+    let statusMsg = document.getElementById("status-financeiro");
+
+    if (!statusMsg) {
+      statusMsg = document.createElement("p");
+      statusMsg.id = "status-financeiro";
+      statusMsg.style.marginTop = "15px";
+      statusMsg.style.fontSize = "18px";
+      document.body.appendChild(statusMsg);
+    }
+
+    if (data.lucro > 0) {
+      statusMsg.innerText = "📈 Empresa lucrativa";
+      statusMsg.style.color = "#22c55e";
+    } else if (data.lucro < 0) {
+      statusMsg.innerText = "⚠️ Empresa operando no prejuízo";
+      statusMsg.style.color = "#ef4444";
+    } else {
+      statusMsg.innerText = "⚖️ Empresa em equilíbrio";
+      statusMsg.style.color = "#eab308";
+    }
+
+  // 🔥 tratar valor corretamente
+const despesas = Number(data.despesas) || 0;
+const graficoEl = document.getElementById("grafico");
+
+// 🔥 controlar exibição do gráfico
+if (despesas === 0) {
+  graficoEl.style.display = "none";
+
+  if (!document.getElementById("msg-sem-despesa")) {
+    const msg = document.createElement("p");
+    msg.id = "msg-sem-despesa";
+    msg.innerText = "Sem despesas registradas ainda";
+    msg.style.marginTop = "20px";
+    msg.style.color = "#94a3b8";
+    document.body.appendChild(msg);
+  }
+
+} else {
+  graficoEl.style.display = "block";
+
+  const msg = document.getElementById("msg-sem-despesa");
+  if (msg) msg.remove();
+}
+
+    // 🔥 valores nos cards
+document.getElementById("receitas").innerText =
+  data.receitas.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+document.getElementById("despesas").innerText =
+  despesas.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+document.getElementById("lucro").innerText =
+  data.lucro.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+    // 🔥 card lucro
+    const cardLucro = document.querySelector(".lucro");
+   cardLucro.style.background = data.lucro < 0 ? "#7f1d1d" : "#2563eb";
+
+    document.getElementById("lucro").style.color =
+      data.lucro < 0 ? "#ff4d4d" : "#22c55e";
+
+    const ctx = document.getElementById('grafico').getContext('2d');
+
+    if (!grafico && despesas > 0) {
+      grafico = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Receitas', 'Despesas'],
+          datasets: [{
+            data: [data.receitas, data.despesas],
+            backgroundColor: ['#16a34a', '#dc2626']
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
+              labels: {
+                color: "white"
+              }
+            }
+          }
+        }
+      });
+    } else if (grafico) {
+      grafico.data.datasets[0].data = [data.receitas, data.despesas];
+      grafico.update();
+    }
+
+  } catch (error) {
+    console.error("Erro ao carregar dashboard:", error);
+  }
+}
+
+carregarDashboard();
+setInterval(carregarDashboard, 3000);
+</script>
+
+</body>
+</html>
