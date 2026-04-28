@@ -1,7 +1,5 @@
 {
-  "outputDirectory": ".",
-  "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/dashboard", "destination": "/dashboard.html" }
+  "routes": [
+    { "src": "/dashboard", "dest": "/dashboard.html" }
   ]
 }
